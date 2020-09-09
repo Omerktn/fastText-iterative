@@ -803,6 +803,7 @@ namespace fasttext
     // Handle inc and dec vectors
     bool decremental = args_->decVectors ? true : false;
     bool incremental = args_->incVectors ? true : false;
+    int expandMethod = args_->expandMethod;
 
     if (incremental && decremental)
     {
@@ -817,16 +818,58 @@ namespace fasttext
           "Dimension of pretrained vectors (" + std::to_string(dim) +
           ") does not match dimension (" + std::to_string(args_->dim) + ")!");
     }
-    mat = std::make_shared<DenseMatrix>(n, dim);
+
+    if (incremental)
+    {
+      mat = std::make_shared<DenseMatrix>(n, dim * 2);
+      std::cout << "@ Incremental - Expand Method: [" << expandMethod << "] ";
+
+      if (expandMethod)
+      {
+        std::cout << "11-22-33-44\n";
+      }
+      else
+      {
+        std::cout << "1234-1234\n";
+      }
+    }
+    else
+    {
+      mat = std::make_shared<DenseMatrix>(n, dim);
+    }
+
     for (size_t i = 0; i < n; i++)
     {
       std::string word;
       in >> word;
       words.push_back(word);
       dict_->add(word);
-      for (size_t j = 0; j < dim; j++)
+
+      if (incremental)
       {
-        in >> mat->at(i, j);
+        real val;
+        for (size_t j = 0; j < dim; j++)
+        {
+          in >> val;
+
+          if (expandMethod)
+          {
+            mat->at(i, j * 2) = val;
+            mat->at(i, j * 2 + 1) = val;
+          }
+          else
+          {
+            mat->at(i, j) = val;
+            mat->at(i, j + dim) = val;
+          }
+        }
+      }
+      else
+      {
+        for (size_t j = 0; j < dim; j++)
+        {
+          in >> mat->at(i, j);
+        }
       }
     }
     in.close();
@@ -834,6 +877,7 @@ namespace fasttext
     std::vector<int> indexes;
     if (decremental)
     {
+      std::cout << "@ Decremental\n";
       int newdim = args_->decVectors;
 
       for (int i = 0; i < dim; i++)
@@ -852,6 +896,11 @@ namespace fasttext
 
       dim = newdim;
       args_->dim = newdim;
+    }
+    else if (incremental)
+    {
+      dim *= 2;
+      args_->dim = args_->dim * 2;
     }
 
     dict_->threshold(1, 0);

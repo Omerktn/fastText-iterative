@@ -49,6 +49,7 @@ namespace fasttext
 
     decVectors = 0;
     incVectors = 0;
+    expandMethod = 0;
 
     autotuneValidationFile = "";
     autotuneMetric = "f1";
@@ -308,6 +309,10 @@ namespace fasttext
         else if (args[ai] == "-incVectors")
         {
           incVectors = std::stoi(args.at(ai + 1));
+        }
+        else if (args[ai] == "-expandMethod")
+        {
+          expandMethod = std::stoi(args.at(ai + 1));
         }
         else
         {
