@@ -10,6 +10,7 @@
 #include <iostream>
 #include <queue>
 #include <stdexcept>
+#include <dirent.h>
 #include "args.h"
 #include "autotune.h"
 #include "fasttext.h"
@@ -38,6 +39,7 @@ void printUsage() {
          "word\n"
       << "  nn                      query for nearest neighbors\n"
       << "  analogies               query for analogies\n"
+      << "  test-analogies          test analogies of all text files in a folder\n"
       << "  dump                    dump arguments,dictionary,input/output "
          "vectors\n"
       << std::endl;
@@ -123,6 +125,13 @@ void printAnalogiesUsage() {
   std::cout << "usage: fasttext analogies <model> <k>\n\n"
             << "  <model>      model filename\n"
             << "  <k>          (optional; 10 by default) predict top k labels\n"
+            << std::endl;
+}
+
+void printTestAnalogiesUsage() {
+  std::cout << "usage: fasttext test-analogies <model> <folder>\n\n"
+            << "  <model>      model filename\n"
+            << "  <folder>     directory of analogies text files\n"
             << std::endl;
 }
 
@@ -355,6 +364,38 @@ void analogies(const std::vector<std::string> args) {
   exit(0);
 }
 
+void testAnalogies(const std::vector<std::string> args) {
+  std::string analogy_file;
+  if (args.size() == 4) {
+    analogy_file = args[3];
+  }
+  else {
+    printTestAnalogiesUsage();
+    throw std::invalid_argument("Add analogy folder location!");
+    exit(EXIT_FAILURE);
+  }
+
+  FastText fasttext;
+  std::string model(args[2]);
+  std::cout << "Loading model " << model << std::endl;
+  fasttext.loadModel(model);
+
+  std::string wordA, wordB, wordC;
+  DIR *dir;
+  struct dirent *ent;
+  if ((dir = opendir(analogy_file.c_str())) != NULL) {
+    /* print all the files and directories within directory */
+    while ((ent = readdir(dir)) != NULL) {
+      printf("%s\n", ent->d_name);
+    }
+    closedir(dir);
+  } else {
+    /* could not open directory */
+    perror("");
+    std::cerr << "Cant open directory\n";
+  }
+}
+
 void train(const std::vector<std::string> args) {
   Args a = Args();
   a.parseArgs(args);
@@ -442,6 +483,8 @@ int main(int argc, char** argv) {
     nn(args);
   } else if (command == "analogies") {
     analogies(args);
+  } else if (command == "test-analogies") {
+    testAnalogies(args);
   } else if (command == "predict" || command == "predict-prob") {
     predict(args);
   } else if (command == "dump") {
