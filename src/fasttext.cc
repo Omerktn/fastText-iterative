@@ -824,13 +824,10 @@ namespace fasttext
       mat = std::make_shared<DenseMatrix>(n, dim * 2);
       std::cout << "@ Incremental - Expand Method: [" << expandMethod << "] ";
 
-      if (expandMethod)
-      {
-        std::cout << "11-22-33-44\n";
-      }
-      else
-      {
+      if (expandMethod) {
         std::cout << "1234-1234\n";
+      } else {
+        std::cout << "11-22-33-44\n";
       }
     }
     else

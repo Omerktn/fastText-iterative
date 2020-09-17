@@ -6,11 +6,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#include <cstdlib>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <queue>
 #include <stdexcept>
 #include <dirent.h>
+#include <string>
 #include "args.h"
 #include "autotune.h"
 #include "fasttext.h"
@@ -364,10 +367,14 @@ void analogies(const std::vector<std::string> args) {
   exit(0);
 }
 
+void calculatePredictions(FastText ft, std::string analogy_file) {
+  
+}
+
 void testAnalogies(const std::vector<std::string> args) {
-  std::string analogy_file;
+  std::string analogy_folder;
   if (args.size() == 4) {
-    analogy_file = args[3];
+    analogy_folder = args[3];
   }
   else {
     printTestAnalogiesUsage();
@@ -380,20 +387,62 @@ void testAnalogies(const std::vector<std::string> args) {
   std::cout << "Loading model " << model << std::endl;
   fasttext.loadModel(model);
 
-  std::string wordA, wordB, wordC;
+  std::string wordA, wordB, wordC, wordD;
+  std::vector<std::string> file_list;
+  std::string tempstr;
+
+  // Get list of text
   DIR *dir;
   struct dirent *ent;
-  if ((dir = opendir(analogy_file.c_str())) != NULL) {
-    /* print all the files and directories within directory */
+  if ((dir = opendir(analogy_folder.c_str())) != NULL) {
+    // Iterate all files in directory
+
     while ((ent = readdir(dir)) != NULL) {
-      printf("%s\n", ent->d_name);
+      tempstr = ent->d_name;
+      if (tempstr != ".." && tempstr != ".")
+        file_list.push_back(tempstr);
     }
     closedir(dir);
+
   } else {
-    /* could not open directory */
+    // could not open directory
     perror("");
     std::cerr << "Cant open directory\n";
+    exit(EXIT_FAILURE);
   }
+
+  // Iterate all analogy files
+  std::string txtfile =  analogy_folder  + "/" + file_list[0];
+  std::ifstream file(txtfile);
+  std::string line;
+  unsigned int totalCount = 0, totalCorrect = 0;
+
+  while (std::getline(file, line, ' '))
+    {
+      wordA = line;
+      std::getline(file, line, ' ');
+      wordB = line;
+      std::getline(file, line, ' ');
+      wordC = line;
+      std::getline(file, line, '\n');
+      wordD = line;
+
+      std::cout << wordA << " " << wordB << " "
+                << wordC << " " << wordD << "\n";
+
+      auto predicts = fasttext.getAnalogies(10, wordA, wordB, wordC);
+      for(auto predict : predicts )
+        {
+          if (predict.second == wordD)
+            {
+              totalCorrect++;
+              std::cout << "correct : " << wordD << std::endl;
+              break;
+            }
+        }
+      totalCount++;
+    }
+
 }
 
 void train(const std::vector<std::string> args) {
