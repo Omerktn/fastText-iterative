@@ -373,15 +373,14 @@ void analogies(const std::vector<std::string> args) {
 std::mutex model_mutex;
 std::mutex vector_mutex;
 
-static void calculateAnalogyPredictions(
-    FastText *ft, std::string analogy_folder, std::string title,
-    std::vector<std::tuple<std::string, unsigned int, unsigned int>> *stats) {
+static void calculateAnalogyPredictions(FastText *ft, std::string analogy_folder,
+                                        std::string title,
+                                        std::vector<std::tuple<std::string, unsigned int, unsigned int>> *stats) {
   std::ifstream file(analogy_folder + "/" + title);
-  std::string wordA, wordB, wordC, wordD;
-  std::string line;
+  std::string line, wordA, wordB, wordC, wordD;
   unsigned int totalCount = 0, totalCorrect = 0;
+  unsigned int softness = 10;
 
-  std::cout << "[ " << title << " ] has started.\n";
   while (std::getline(file, line, ' ')) {
     wordA = line;
     std::getline(file, line, ' ');
@@ -391,26 +390,25 @@ static void calculateAnalogyPredictions(
     std::getline(file, line, '\n');
     wordD = line;
 
-    //std::cout << wordA << " " << wordB << " " << wordC << " " << wordD << "\n";
-
-    //std::lock_guard<std::mutex> guard(model_mutex);
     model_mutex.lock();
-    auto predicts = ft->getAnalogies(10, wordA, wordB, wordC);
+    auto predicts = ft->getAnalogies(softness, wordA, wordB, wordC);
     model_mutex.unlock();
+
     for (auto predict : predicts) {
       if (predict.second == wordD) {
         totalCorrect++;
-        //std::cout << "correct : " << wordD << std::endl;
         break;
       }
     }
     totalCount++;
   }
 
-  std::cout << title << " Correct: " << totalCorrect << "\t Total: " << totalCount << "\n";
-
   std::lock_guard<std::mutex> lock(vector_mutex);
   stats->push_back(std::make_tuple(title, totalCount, totalCorrect));
+  std::cout << "[ " << std::setw(31) << title << " ] Correct: " << totalCorrect
+            << "\t Total: " << totalCount << " \t Acc: "
+            << std::setprecision(4) << (double) totalCorrect / totalCount << std::endl;
+  ;
 }
 
 void testAnalogies(const std::vector<std::string> args) {
@@ -429,7 +427,6 @@ void testAnalogies(const std::vector<std::string> args) {
   std::cout << "Loading model " << model << std::endl;
   fasttext.loadModel(model);
 
-
   std::vector<std::string> file_list;
   std::string tempstr;
 
@@ -441,17 +438,18 @@ void testAnalogies(const std::vector<std::string> args) {
 
     while ((ent = readdir(dir)) != NULL) {
       tempstr = ent->d_name;
+
       if (tempstr != ".." && tempstr != ".")
         file_list.push_back(tempstr);
     }
     closedir(dir);
 
   } else {
-    // could not open directory
-    perror("");
     std::cerr << "Cant open directory\n";
     exit(EXIT_FAILURE);
   }
+
+  const clock_t begin_time = std::clock();
 
   std::vector<std::future<void>> m_future;
   std::vector<std::tuple<std::string, unsigned int, unsigned int>> stats;
@@ -460,7 +458,22 @@ void testAnalogies(const std::vector<std::string> args) {
     {
       m_future.push_back(std::async(std::launch::async, calculateAnalogyPredictions, &fasttext,
                                     analogy_folder, filename, &stats));
+      std::cout << "[ " << std::setw(31) << filename << " ] has started." << std::endl;
     }
+
+  std::cout << "~\n";
+  for(int i=0; i < m_future.size(); i++)
+    {
+      m_future[i].wait();
+    }
+
+  std::cout << "Elapsed Time: " << float(std::clock() - begin_time) / CLOCKS_PER_SEC << " second.\n";
+  double mean_accuracy_by_category = 0;
+  for (auto stat : stats) {
+    mean_accuracy_by_category += (double) std::get<2>(stat) / std::get<1>(stat);
+    }
+  mean_accuracy_by_category /= stats.size();
+  std::cout << "Mean accuracy: " << mean_accuracy_by_category;
 }
 
 void train(const std::vector<std::string> args) {
