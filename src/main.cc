@@ -406,9 +406,8 @@ static void calculateAnalogyPredictions(FastText *ft, std::string analogy_folder
   std::lock_guard<std::mutex> lock(vector_mutex);
   stats->push_back(std::make_tuple(title, totalCount, totalCorrect));
   std::cout << "[ " << std::setw(31) << title << " ] Correct: " << totalCorrect
-            << "\t Total: " << totalCount << " \t Acc: "
+            << "\t Total: " << totalCount << " \t Soft" << softness << " Acc: "
             << std::setprecision(4) << (double) totalCorrect / totalCount << std::endl;
-  ;
 }
 
 void testAnalogies(const std::vector<std::string> args) {
@@ -461,7 +460,8 @@ void testAnalogies(const std::vector<std::string> args) {
       std::cout << "[ " << std::setw(31) << filename << " ] has started." << std::endl;
     }
 
-  std::cout << "~\n";
+  std::cout << "~\n" << args[2] << std::endl;
+
   for(int i=0; i < m_future.size(); i++)
     {
       m_future[i].wait();

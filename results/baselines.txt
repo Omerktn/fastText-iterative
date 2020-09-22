@@ -1,0 +1,100 @@
+Loading model ./models/enwik_d100_e30.bin
+~
+[ gram6-nationality-adjective.txt ] Correct: 95	 Total: 1599 	 Soft10 Acc: 0.05941
+[                    currency.txt ] Correct: 0	 	 Total: 866 	 Soft10 Acc: 0
+[           gram3-comparative.txt ] Correct: 117	 Total: 1332 	 Soft10 Acc: 0.08784
+[                gram8-plural.txt ] Correct: 639	 Total: 1332 	 Soft10 Acc: 0.4797
+[              gram2-opposite.txt ] Correct: 246	 Total: 812 	 Soft10 Acc: 0.303
+[    gram5-present-participle.txt ] Correct: 439	 Total: 1056 	 Soft10 Acc: 0.4157
+[    capital-common-countries.txt ] Correct: 0	 	 Total: 506 	 Soft10 Acc: 0
+[    gram1-adjective-to-averb.txt ] Correct: 239	 Total: 992 	 Soft10 Acc: 0.2409
+[          gram9-plural-verbs.txt ] Correct: 357	 Total: 870 	 Soft10 Acc: 0.4103
+[           gram4-superlative.txt ] Correct: 10	 Total: 1122 	 Soft10 Acc: 0.008913
+[                      family.txt ] Correct: 61	 Total: 506 	 Soft10 Acc: 0.1206
+[            gram7-past-tense.txt ] Correct: 190	 Total: 1560 	 Soft10 Acc: 0.1218
+[               city-in-state.txt ] Correct: 13	 Total: 2467 	 Soft10 Acc: 0.00527
+[               capital-world.txt ] Correct: 6	 Total: 4524 	 Soft10 Acc: 0.001326
+Elapsed Time: 280.9 second.
+Mean accuracy: 0.1611%  
+
+
+
+./models/enwik_d150_e30.bin
+[           gram3-comparative.txt ] Correct: 140	 Total: 1332 	 Soft10 Acc: 0.1051
+[                      family.txt ] Correct: 50	 Total: 506 	 Soft10 Acc: 0.09881
+[    capital-common-countries.txt ] Correct: 1	 Total: 506 	 Soft10 Acc: 0.001976
+[    gram1-adjective-to-averb.txt ] Correct: 306	 Total: 992 	 Soft10 Acc: 0.3085
+[                gram8-plural.txt ] Correct: 744	 Total: 1332 	 Soft10 Acc: 0.5586
+[ gram6-nationality-adjective.txt ] Correct: 121	 Total: 1599 	 Soft10 Acc: 0.07567
+[                    currency.txt ] Correct: 0	 Total: 866 	 Soft10 Acc: 0
+[              gram2-opposite.txt ] Correct: 366	 Total: 812 	 Soft10 Acc: 0.4507
+[           gram4-superlative.txt ] Correct: 23	 Total: 1122 	 Soft10 Acc: 0.0205
+[          gram9-plural-verbs.txt ] Correct: 414	 Total: 870 	 Soft10 Acc: 0.4759
+[            gram7-past-tense.txt ] Correct: 275	 Total: 1560 	 Soft10 Acc: 0.1763
+[    gram5-present-participle.txt ] Correct: 468	 Total: 1056 	 Soft10 Acc: 0.4432
+[               city-in-state.txt ] Correct: 8	 Total: 2467 	 Soft10 Acc: 0.003243
+[               capital-world.txt ] Correct: 22	 Total: 4524 	 Soft10 Acc: 0.004863
+Elapsed Time: 439.7 second.
+Mean accuracy: 0.1945% 
+
+
+
+./models/enwik_d200_e30.bin
+[            gram7-past-tense.txt ] Correct: 255	 Total: 1560 	 Soft10 Acc: 0.1635
+[                      family.txt ] Correct: 66	 Total: 506 	 Soft10 Acc: 0.1304
+[                    currency.txt ] Correct: 0	 Total: 866 	 Soft10 Acc: 0
+[    capital-common-countries.txt ] Correct: 6	 Total: 506 	 Soft10 Acc: 0.01186
+[              gram2-opposite.txt ] Correct: 469	 Total: 812 	 Soft10 Acc: 0.5776
+[           gram3-comparative.txt ] Correct: 171	 Total: 1332 	 Soft10 Acc: 0.1284
+[                gram8-plural.txt ] Correct: 783	 Total: 1332 	 Soft10 Acc: 0.5878
+[    gram1-adjective-to-averb.txt ] Correct: 356	 Total: 992 	 Soft10 Acc: 0.3589
+[          gram9-plural-verbs.txt ] Correct: 456	 Total: 870 	 Soft10 Acc: 0.5241
+[               city-in-state.txt ] Correct: 2	 Total: 2467 	 Soft10 Acc: 0.0008107
+[ gram6-nationality-adjective.txt ] Correct: 180	 Total: 1599 	 Soft10 Acc: 0.1126
+[           gram4-superlative.txt ] Correct: 26	 Total: 1122 	 Soft10 Acc: 0.02317
+[    gram5-present-participle.txt ] Correct: 495	 Total: 1056 	 Soft10 Acc: 0.4688
+[               capital-world.txt ] Correct: 34	 Total: 4524 	 Soft10 Acc: 0.007515
+Elapsed Time: 518 second.
+Mean accuracy: 0.2211%  
+
+
+
+
+./models/enwik_d250_e30.bin
+[    capital-common-countries.txt ] Correct: 5	 Total: 506 	 Soft10 Acc: 0.009881
+[                      family.txt ] Correct: 46	 Total: 506 	 Soft10 Acc: 0.09091
+[          gram9-plural-verbs.txt ] Correct: 445	 Total: 870 	 Soft10 Acc: 0.5115
+[              gram2-opposite.txt ] Correct: 518	 Total: 812 	 Soft10 Acc: 0.6379
+[    gram5-present-participle.txt ] Correct: 484	 Total: 1056 	 Soft10 Acc: 0.4583
+[ gram6-nationality-adjective.txt ] Correct: 252	 Total: 1599 	 Soft10 Acc: 0.1576
+[               city-in-state.txt ] Correct: 11	 Total: 2467 	 Soft10 Acc: 0.004459
+[    gram1-adjective-to-averb.txt ] Correct: 467	 Total: 992 	 Soft10 Acc: 0.4708
+[                    currency.txt ] Correct: 0	 Total: 866 	 Soft10 Acc: 0
+[                gram8-plural.txt ] Correct: 777	 Total: 1332 	 Soft10 Acc: 0.5833
+[           gram4-superlative.txt ] Correct: 45	 Total: 1122 	 Soft10 Acc: 0.04011
+[            gram7-past-tense.txt ] Correct: 231	 Total: 1560 	 Soft10 Acc: 0.1481
+[           gram3-comparative.txt ] Correct: 257	 Total: 1332 	 Soft10 Acc: 0.1929
+[               capital-world.txt ] Correct: 36	 Total: 4524 	 Soft10 Acc: 0.007958
+Elapsed Time: 609.2 second.
+Mean accuracy: 0.2367% 
+
+
+
+
+/models/enwik_d300_e30.bin
+[    gram1-adjective-to-averb.txt ] Correct: 513	 Total: 992 	 Soft10 Acc: 0.5171
+[                      family.txt ] Correct: 49	 Total: 506 	 Soft10 Acc: 0.09684
+[    capital-common-countries.txt ] Correct: 1	 Total: 506 	 Soft10 Acc: 0.001976
+[           gram4-superlative.txt ] Correct: 60	 Total: 1122 	 Soft10 Acc: 0.05348
+[           gram3-comparative.txt ] Correct: 265	 Total: 1332 	 Soft10 Acc: 0.1989
+[                    currency.txt ] Correct: 0	 Total: 866 	 Soft10 Acc: 0
+[          gram9-plural-verbs.txt ] Correct: 497	 Total: 870 	 Soft10 Acc: 0.5713
+[    gram5-present-participle.txt ] Correct: 538	 Total: 1056 	 Soft10 Acc: 0.5095
+[              gram2-opposite.txt ] Correct: 534	 Total: 812 	 Soft10 Acc: 0.6576
+[            gram7-past-tense.txt ] Correct: 190	 Total: 1560 	 Soft10 Acc: 0.1218
+[ gram6-nationality-adjective.txt ] Correct: 219	 Total: 1599 	 Soft10 Acc: 0.137
+[                gram8-plural.txt ] Correct: 774	 Total: 1332 	 Soft10 Acc: 0.5811
+[               city-in-state.txt ] Correct: 9	 Total: 2467 	 Soft10 Acc: 0.003648
+[               capital-world.txt ] Correct: 37	 Total: 4524 	 Soft10 Acc: 0.008179
+Elapsed Time: 787.3 second.
+Mean accuracy: 0.247%   
