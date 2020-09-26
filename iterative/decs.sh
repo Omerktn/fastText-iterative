@@ -6,8 +6,8 @@ version="_v2"
 dim_array=()
 acc_array=()
 
-start_dim=100
-dim=80
+start_dim=200
+dim=180
 former_dim=$dim
 
 first_output=./models/decwik_e${epoch}_d${start_dim}t${dim}${version}
@@ -24,7 +24,7 @@ if [[ $analogy_out =~ $re ]]; then
     acc_array+=($match)
 fi
 
-for dim in 60 40
+for dim in 160 140
 do
     new_output=./models/decwik_e${epoch}_d${start_dim}t${dim}${version}
     pretrained=./models/decwik_e${epoch}_d${start_dim}t${former_dim}${version}.vec
@@ -39,6 +39,7 @@ do
     if [[ $analogy_out =~ $re ]]; then
         match=${BASH_REMATCH[1]}
         acc_array+=($match)
+        echo "Catched :" $match "at dim " $dim
     fi
     dim_array+=($dim)
 done

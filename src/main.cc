@@ -441,6 +441,7 @@ void testAnalogies(const std::vector<std::string> args) {
       if (tempstr != ".." && tempstr != ".")
         file_list.push_back(tempstr);
     }
+    
     closedir(dir);
 
   } else {

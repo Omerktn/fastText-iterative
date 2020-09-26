@@ -1,1 +1,0 @@
-omer@omer-ideapad.10889:1600759560
