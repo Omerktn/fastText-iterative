@@ -19,6 +19,7 @@
 #include <tuple>
 #include "args.h"
 #include "autotune.h"
+#include "dictionary.h"
 #include "fasttext.h"
 
 using namespace fasttext;
@@ -338,6 +339,22 @@ void nn(const std::vector<std::string> args) {
   exit(0);
 }
 
+void showModelOutputs(const std::vector<std::string> args) {
+  FastText fasttext;
+  std::string model(args[2]);
+  std::cout << "Loading model " << model << std::endl;
+  fasttext.loadModel(model);
+
+  std::shared_ptr<const Dictionary> dict = fasttext.getDictionary();
+
+  if (args.size() < 4)
+    {
+      throw std::invalid_argument("Show output arugments are not valid!");
+    }
+
+  fasttext.readFileDumpOutput(args[3]);
+}
+
 void analogies(const std::vector<std::string> args) {
   int32_t k;
   if (args.size() == 3) {
@@ -441,7 +458,6 @@ void testAnalogies(const std::vector<std::string> args) {
       if (tempstr != ".." && tempstr != ".")
         file_list.push_back(tempstr);
     }
-    
     closedir(dir);
 
   } else {
@@ -566,6 +582,8 @@ int main(int argc, char** argv) {
     analogies(args);
   } else if (command == "test-analogies") {
     testAnalogies(args);
+  } else if (command == "show-output") {
+    showModelOutputs(args);
   } else if (command == "predict" || command == "predict-prob") {
     predict(args);
   } else if (command == "dump") {

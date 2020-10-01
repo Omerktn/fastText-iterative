@@ -11,6 +11,7 @@
 #include "quantmatrix.h"
 
 #include <algorithm>
+#include <bits/stdint-intn.h>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
@@ -720,6 +721,31 @@ namespace fasttext
     lazyComputeWordVectors();
     assert(wordVectors_);
     return getNN(*wordVectors_, query, k, {wordA, wordB, wordC});
+  }
+
+  void FastText::readFileDumpOutput(const std::string &filename)
+  {
+    std::ifstream ifs(filename);
+    if (!ifs.is_open()) {
+      throw std::invalid_argument(filename + " cannot be opened for training!");
+    }
+
+    Model::State state(args_->dim, output_->size(0), args_->seed);
+    const int64_t ntokens = dict_->ntokens();
+
+    std::vector<int32_t> line;
+    while(keepTraining(ntokens))
+      {
+        tokenCount_ += dict_->getLine(ifs, line, state.rng);
+
+        std::cout << "# [";
+        for (int32_t line_char : line) {
+          std::cout << dict_->getWord(line_char) << ", ";
+        }
+        std::cout << "]\n";
+      }
+
+    ifs.close();
   }
 
   bool FastText::keepTraining(const int64_t ntokens) const

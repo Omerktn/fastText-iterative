@@ -154,6 +154,8 @@ class FastText {
 
   void train(const Args& args, const TrainCallback& callback = {});
 
+  void readFileDumpOutput(const std::string &filename);
+
   void abort();
 
   int getDimension() const;
