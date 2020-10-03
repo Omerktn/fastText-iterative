@@ -36,7 +36,9 @@ class FastText {
   using TrainCallback =
       std::function<void(float, float, double, double, int64_t)>;
 
- protected:
+  std::shared_ptr<FastText> big_fasttext;
+
+protected:
   std::shared_ptr<Args> args_;
   std::shared_ptr<Dictionary> dict_;
   std::shared_ptr<Matrix> input_;
@@ -49,6 +51,7 @@ class FastText {
   int32_t version;
   std::unique_ptr<DenseMatrix> wordVectors_;
   std::exception_ptr trainException_;
+
 
   void signModel(std::ostream&);
   bool checkModel(std::istream&);

@@ -50,6 +50,7 @@ namespace fasttext
     decVectors = 0;
     incVectors = 0;
     expandMethod = 0;
+    distillFrom = "";
 
     autotuneValidationFile = "";
     autotuneMetric = "f1";
@@ -310,12 +311,14 @@ namespace fasttext
         {
           incVectors = std::stoi(args.at(ai + 1));
         }
+        else if (args[ai] == "-distillFrom")
+        {
+          distillFrom = std::string(args.at(ai + 1));
+        }
         else if (args[ai] == "-expandMethod")
         {
           expandMethod = std::stoi(args.at(ai + 1));
-        }
-        else
-        {
+        } else {
           std::cerr << "Unknown argument: " << args[ai] << std::endl;
           printHelp();
           exit(EXIT_FAILURE);

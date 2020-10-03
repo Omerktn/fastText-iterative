@@ -8,6 +8,7 @@
 
 #include "model.h"
 #include "loss.h"
+#include "matrix.h"
 #include "utils.h"
 
 #include <algorithm>
@@ -39,12 +40,27 @@ Model::Model(
     bool normalizeGradient)
     : wi_(wi), wo_(wo), loss_(loss), normalizeGradient_(normalizeGradient) {}
 
+
+
 void Model::computeHidden(const std::vector<int32_t>& input, State& state)
     const {
   Vector& hidden = state.hidden;
   hidden.zero();
   for (auto it = input.cbegin(); it != input.cend(); ++it) {
     hidden.addRow(*wi_, *it);
+  }
+  hidden.mul(1.0 / input.size());
+}
+
+// Distillation compuatin for input -> hidden layer
+void Model::computeDistillHidden(const std::vector<int32_t> &input,
+                                 const std::shared_ptr<Matrix> big_wo,
+                                 State &state) const {
+  Vector &hidden = state.hidden;
+  hidden.zero();
+
+  for (auto it = input.cbegin(); it != input.cend(); ++it) {
+    hidden.addRow(*big_wo, *it);
   }
   hidden.mul(1.0 / input.size());
 }
@@ -88,6 +104,33 @@ void Model::update(
   for (auto it = input.cbegin(); it != input.cend(); ++it) {
     wi_->addVectorToRow(grad, *it, 1.0);
   }
+}
+
+  void Model::updateDistill(const std::vector<int32_t> &input,
+                   const std::vector<int32_t> &targets, int32_t targetIndex,
+                   const std::shared_ptr<Matrix> big_wo, real lr, State &state)
+{
+  if (input.size() == 0) {
+    return;
+  }
+  computeDistillHidden(input, big_wo, state);
+
+  Vector &grad = state.grad;
+  grad.zero();
+  real lossValue = loss_->forward(targets, targetIndex, state, lr, true);
+  state.incrementNExamples(lossValue);
+
+  if (normalizeGradient_) {
+    grad.mul(1.0 / input.size());
+  }
+  for (auto it = input.cbegin(); it != input.cend(); ++it) {
+    wi_->addVectorToRow(grad, *it, 1.0);
+  }
+}
+
+  std::shared_ptr<Matrix> Model::get_wo()
+{
+  return wo_;
 }
 
 real Model::std_log(real x) const {

@@ -10,6 +10,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 #include <queue>
 #include <stdexcept>
 #include <dirent.h>
@@ -511,6 +512,15 @@ void train(const std::vector<std::string> args) {
         outputFileName + " cannot be opened for saving.");
   }
   ofs.close();
+
+  // Load big distillation model
+  if(!a.distillFrom.empty())
+    {
+      fasttext->big_fasttext = std::make_shared<FastText>();
+      fasttext->big_fasttext->loadModel(a.distillFrom);
+      std::cout << "(#) Distillation model has loaded.\n";
+    }
+
   if (a.hasAutotune()) {
     Autotune autotune(fasttext);
     autotune.train(a);

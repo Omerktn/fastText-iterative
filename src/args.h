@@ -79,6 +79,7 @@ namespace fasttext
     int decVectors;
     int incVectors;
     int expandMethod;
+    std::string distillFrom;
 
     std::string autotuneValidationFile;
     std::string autotuneMetric;

@@ -56,19 +56,26 @@ class Model {
     void incrementNExamples(real loss);
   };
 
-  void predict(
-      const std::vector<int32_t>& input,
-      int32_t k,
-      real threshold,
-      Predictions& heap,
-      State& state) const;
-  void update(
-      const std::vector<int32_t>& input,
-      const std::vector<int32_t>& targets,
-      int32_t targetIndex,
-      real lr,
-      State& state);
-  void computeHidden(const std::vector<int32_t>& input, State& state) const;
+  std::shared_ptr<Matrix> get_wo();
+
+  void predict(const std::vector<int32_t> &input, int32_t k, real threshold,
+               Predictions &heap, State &state) const;
+
+  void update(const std::vector<int32_t> &input,
+              const std::vector<int32_t> &targets, int32_t targetIndex, real lr,
+              State &state);
+
+  void updateDistill(const std::vector<int32_t> &input,
+                            const std::vector<int32_t> &targets,
+                            int32_t targetIndex,
+                            const std::shared_ptr<Matrix> big_wo, real lr,
+                            State &state);
+
+  void computeHidden(const std::vector<int32_t> &input, State &state) const;
+
+  void computeDistillHidden(const std::vector<int32_t> &input,
+                            const std::shared_ptr<Matrix> big_wo,
+                            State &state) const;
 
   real std_log(real) const;
 

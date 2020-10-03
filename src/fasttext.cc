@@ -476,7 +476,14 @@ namespace fasttext
       {
         if (c != 0 && w + c >= 0 && w + c < line.size())
         {
-          model_->update(ngrams, line, w + c, lr, state);
+          if (args_->distillFrom.empty())
+            {
+              model_->update(ngrams, line, w + c, lr, state);
+            }
+          else
+            {
+              model_->updateDistill(ngrams, line, w + c, big_fasttext->model_->get_wo(), lr, state);
+            }
         }
       }
     }
@@ -743,6 +750,8 @@ namespace fasttext
           std::cout << dict_->getWord(line_char) << ", ";
         }
         std::cout << "]\n";
+
+        // std::cout << dict_->get
       }
 
     ifs.close();
