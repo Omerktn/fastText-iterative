@@ -26,10 +26,13 @@ class Model {
  protected:
   std::shared_ptr<Matrix> wi_;
   std::shared_ptr<Matrix> wo_;
-  std::shared_ptr<Loss> loss_;
+  // loss_ was here
   bool normalizeGradient_;
 
- public:
+public:
+  std::shared_ptr<Loss> loss_;
+
+public:
   Model(
       std::shared_ptr<Matrix> wi,
       std::shared_ptr<Matrix> wo,
@@ -66,16 +69,13 @@ class Model {
               State &state);
 
   void updateDistill(const std::vector<int32_t> &input,
-                            const std::vector<int32_t> &targets,
-                            int32_t targetIndex,
-                            const std::shared_ptr<Matrix> big_wo, real lr,
-                            State &state);
+                     const std::vector<int32_t> &targets,
+                     int32_t targetIndex,
+                     Vector &big_output,
+                     real lr,
+                     State &state);
 
   void computeHidden(const std::vector<int32_t> &input, State &state) const;
-
-  void computeDistillHidden(const std::vector<int32_t> &input,
-                            const std::shared_ptr<Matrix> big_wo,
-                            State &state) const;
 
   real std_log(real) const;
 

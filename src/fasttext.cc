@@ -19,6 +19,7 @@
 #include <stdexcept>
 #include <string>
 #include <thread>
+#include <utility>
 #include <vector>
 
 namespace fasttext
@@ -476,273 +477,264 @@ namespace fasttext
       {
         if (c != 0 && w + c >= 0 && w + c < line.size())
         {
-          if (args_->distillFrom.empty())
-            {
-              model_->update(ngrams, line, w + c, lr, state);
-            }
-          else
-            {
-              model_->updateDistill(ngrams, line, w + c, big_fasttext->model_->get_wo(), lr, state);
-            }
+          model_->update(ngrams, line, w + c, lr, state);
         }
       }
     }
   }
 
-  std::tuple<int64_t, double, double>
-  FastText::test(std::istream &in, int32_t k, real threshold)
+  void FastText::skipgramDistill(
+                                 Model::State &state,
+                                 Model::State &big_state,
+                                 real lr,
+                                 const std::vector<int32_t> &line,
+                                 std::vector<std::shared_ptr<Vector>> &temp_vectors)
   {
-    Meter meter;
-    test(in, k, threshold, meter);
-
-    return std::tuple<int64_t, double, double>(
-        meter.nexamples(), meter.precision(), meter.recall());
-  }
-
-  void FastText::test(std::istream &in, int32_t k, real threshold, Meter &meter)
-      const
-  {
-    std::vector<int32_t> line;
-    std::vector<int32_t> labels;
-    Predictions predictions;
-    Model::State state(args_->dim, dict_->nlabels(), 0);
-    in.clear();
-    in.seekg(0, std::ios_base::beg);
-
-    while (in.peek() != EOF)
-    {
-      line.clear();
-      labels.clear();
-      dict_->getLine(in, line, labels);
-
-      if (!labels.empty() && !line.empty())
+    std::uniform_int_distribution<> uniform(1, args_->ws);
+    for (int32_t w = 0; w < line.size(); w++)
       {
-        predictions.clear();
-        predict(k, line, predictions, threshold);
-        meter.log(labels, predictions);
+      int32_t boundary = uniform(state.rng);
+      const std::vector<int32_t> &ngrams = dict_->getSubwords(line[w]);
+      for (int32_t c = -boundary; c <= boundary; c++)
+        {
+        if (c != 0 && w + c >= 0 && w + c < line.size())
+          {
+            big_fasttext->model_->computeHidden(ngrams, big_state);
+            //big_fasttext->model_->loss_->forward(line, w + c, big_state, lr, true);
+
+            Vector out_word_vec(big_fasttext->args_->dim);
+            big_fasttext->getWordVector(out_word_vec, big_fasttext->dict_->getWord(line[w + c]));
+
+            auto nn_result = big_fasttext->getNN(*big_fasttext->wordVectors_, out_word_vec, 5,
+                                                 {big_fasttext->dict_->getWord(line[w + c])});
+
+            std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> nn_id_word;
+            for (int i=0; i < 5; i++) {
+              auto nn_pair = nn_result[i];
+              getWordVector(*(temp_vectors[0]), nn_pair.second);
+              nn_id_word.push_back(std::make_pair(dict_->getId(nn_pair.second), temp_vectors[0]));
+            }
+
+            big_fasttext->model_->loss_->computeOutputFast(big_state, nn_id_word);
+
+            model_->updateDistill(ngrams, line, w + c,
+                                  big_state.output, lr, state);
+        }
       }
     }
   }
 
-  void FastText::predict(
-      int32_t k,
-      const std::vector<int32_t> &words,
-      Predictions &predictions,
-      real threshold) const
-  {
-    if (words.empty())
-    {
-      return;
-    }
-    Model::State state(args_->dim, dict_->nlabels(), 0);
-    if (args_->model != model_name::sup)
-    {
-      throw std::invalid_argument("Model needs to be supervised for prediction!");
-    }
-    model_->predict(words, k, threshold, predictions, state);
-  }
+    std::tuple<int64_t, double, double> FastText::test(
+        std::istream & in, int32_t k, real threshold) {
+      Meter meter;
+      test(in, k, threshold, meter);
 
-  bool FastText::predictLine(
-      std::istream &in,
-      std::vector<std::pair<real, std::string>> &predictions,
-      int32_t k,
-      real threshold) const
-  {
-    predictions.clear();
-    if (in.peek() == EOF)
-    {
-      return false;
+      return std::tuple<int64_t, double, double>(
+          meter.nexamples(), meter.precision(), meter.recall());
     }
 
-    std::vector<int32_t> words, labels;
-    dict_->getLine(in, words, labels);
-    Predictions linePredictions;
-    predict(k, words, linePredictions, threshold);
-    for (const auto &p : linePredictions)
-    {
-      predictions.push_back(
-          std::make_pair(std::exp(p.first), dict_->getLabel(p.second)));
-    }
+    void FastText::test(std::istream & in, int32_t k, real threshold,
+                        Meter & meter) const {
+      std::vector<int32_t> line;
+      std::vector<int32_t> labels;
+      Predictions predictions;
+      Model::State state(args_->dim, dict_->nlabels(), 0);
+      in.clear();
+      in.seekg(0, std::ios_base::beg);
 
-    return true;
-  }
+      while (in.peek() != EOF) {
+        line.clear();
+        labels.clear();
+        dict_->getLine(in, line, labels);
 
-  void FastText::getSentenceVector(std::istream &in, fasttext::Vector &svec)
-  {
-    svec.zero();
-    if (args_->model == model_name::sup)
-    {
-      std::vector<int32_t> line, labels;
-      dict_->getLine(in, line, labels);
-      for (int32_t i = 0; i < line.size(); i++)
-      {
-        addInputVector(svec, line[i]);
-      }
-      if (!line.empty())
-      {
-        svec.mul(1.0 / line.size());
+        if (!labels.empty() && !line.empty()) {
+          predictions.clear();
+          predict(k, line, predictions, threshold);
+          meter.log(labels, predictions);
+        }
       }
     }
-    else
-    {
+
+    void FastText::predict(int32_t k, const std::vector<int32_t> &words,
+                           Predictions &predictions, real threshold) const {
+      if (words.empty()) {
+        return;
+      }
+      Model::State state(args_->dim, dict_->nlabels(), 0);
+      if (args_->model != model_name::sup) {
+        throw std::invalid_argument(
+            "Model needs to be supervised for prediction!");
+      }
+      model_->predict(words, k, threshold, predictions, state);
+    }
+
+    bool FastText::predictLine(std::istream & in,
+                               std::vector<std::pair<real, std::string>> &
+                                   predictions,
+                               int32_t k, real threshold) const {
+      predictions.clear();
+      if (in.peek() == EOF) {
+        return false;
+      }
+
+      std::vector<int32_t> words, labels;
+      dict_->getLine(in, words, labels);
+      Predictions linePredictions;
+      predict(k, words, linePredictions, threshold);
+      for (const auto &p : linePredictions) {
+        predictions.push_back(
+            std::make_pair(std::exp(p.first), dict_->getLabel(p.second)));
+      }
+
+      return true;
+    }
+
+    void FastText::getSentenceVector(std::istream & in,
+                                     fasttext::Vector & svec) {
+      svec.zero();
+      if (args_->model == model_name::sup) {
+        std::vector<int32_t> line, labels;
+        dict_->getLine(in, line, labels);
+        for (int32_t i = 0; i < line.size(); i++) {
+          addInputVector(svec, line[i]);
+        }
+        if (!line.empty()) {
+          svec.mul(1.0 / line.size());
+        }
+      } else {
+        Vector vec(args_->dim);
+        std::string sentence;
+        std::getline(in, sentence);
+        std::istringstream iss(sentence);
+        std::string word;
+        int32_t count = 0;
+        while (iss >> word) {
+          getWordVector(vec, word);
+          real norm = vec.norm();
+          if (norm > 0) {
+            vec.mul(1.0 / norm);
+            svec.addVector(vec);
+            count++;
+          }
+        }
+        if (count > 0) {
+          svec.mul(1.0 / count);
+        }
+      }
+    }
+
+    std::vector<std::pair<std::string, Vector>> FastText::getNgramVectors(
+        const std::string &word) const {
+      std::vector<std::pair<std::string, Vector>> result;
+      std::vector<int32_t> ngrams;
+      std::vector<std::string> substrings;
+      dict_->getSubwords(word, ngrams, substrings);
+      assert(ngrams.size() <= substrings.size());
+      for (int32_t i = 0; i < ngrams.size(); i++) {
+        Vector vec(args_->dim);
+        if (ngrams[i] >= 0) {
+          vec.addRow(*input_, ngrams[i]);
+        }
+        result.push_back(std::make_pair(substrings[i], std::move(vec)));
+      }
+      return result;
+    }
+
+    void FastText::precomputeWordVectors(DenseMatrix & wordVectors) {
       Vector vec(args_->dim);
-      std::string sentence;
-      std::getline(in, sentence);
-      std::istringstream iss(sentence);
-      std::string word;
-      int32_t count = 0;
-      while (iss >> word)
-      {
+      wordVectors.zero();
+      for (int32_t i = 0; i < dict_->nwords(); i++) {
+        std::string word = dict_->getWord(i);
         getWordVector(vec, word);
         real norm = vec.norm();
-        if (norm > 0)
-        {
-          vec.mul(1.0 / norm);
-          svec.addVector(vec);
-          count++;
-        }
-      }
-      if (count > 0)
-      {
-        svec.mul(1.0 / count);
-      }
-    }
-  }
-
-  std::vector<std::pair<std::string, Vector>> FastText::getNgramVectors(
-      const std::string &word) const
-  {
-    std::vector<std::pair<std::string, Vector>> result;
-    std::vector<int32_t> ngrams;
-    std::vector<std::string> substrings;
-    dict_->getSubwords(word, ngrams, substrings);
-    assert(ngrams.size() <= substrings.size());
-    for (int32_t i = 0; i < ngrams.size(); i++)
-    {
-      Vector vec(args_->dim);
-      if (ngrams[i] >= 0)
-      {
-        vec.addRow(*input_, ngrams[i]);
-      }
-      result.push_back(std::make_pair(substrings[i], std::move(vec)));
-    }
-    return result;
-  }
-
-  void FastText::precomputeWordVectors(DenseMatrix &wordVectors)
-  {
-    Vector vec(args_->dim);
-    wordVectors.zero();
-    for (int32_t i = 0; i < dict_->nwords(); i++)
-    {
-      std::string word = dict_->getWord(i);
-      getWordVector(vec, word);
-      real norm = vec.norm();
-      if (norm > 0)
-      {
-        wordVectors.addVectorToRow(vec, i, 1.0 / norm);
-      }
-    }
-  }
-
-  void FastText::lazyComputeWordVectors()
-  {
-    if (!wordVectors_)
-    {
-      wordVectors_ = std::unique_ptr<DenseMatrix>(
-          new DenseMatrix(dict_->nwords(), args_->dim));
-      precomputeWordVectors(*wordVectors_);
-    }
-  }
-
-  std::vector<std::pair<real, std::string>> FastText::getNN(
-      const std::string &word,
-      int32_t k)
-  {
-    Vector query(args_->dim);
-
-    getWordVector(query, word);
-
-    lazyComputeWordVectors();
-    assert(wordVectors_);
-    return getNN(*wordVectors_, query, k, {word});
-  }
-
-  std::vector<std::pair<real, std::string>> FastText::getNN(
-      const DenseMatrix &wordVectors,
-      const Vector &query,
-      int32_t k,
-      const std::set<std::string> &banSet)
-  {
-    std::vector<std::pair<real, std::string>> heap;
-
-    real queryNorm = query.norm();
-    if (std::abs(queryNorm) < 1e-8)
-    {
-      queryNorm = 1;
-    }
-
-    for (int32_t i = 0; i < dict_->nwords(); i++)
-    {
-      std::string word = dict_->getWord(i);
-      if (banSet.find(word) == banSet.end())
-      {
-        real dp = wordVectors.dotRow(query, i);
-        real similarity = dp / queryNorm;
-
-        if (heap.size() == k && similarity < heap.front().first)
-        {
-          continue;
-        }
-        heap.push_back(std::make_pair(similarity, word));
-        std::push_heap(heap.begin(), heap.end(), comparePairs);
-        if (heap.size() > k)
-        {
-          std::pop_heap(heap.begin(), heap.end(), comparePairs);
-          heap.pop_back();
+        if (norm > 0) {
+          wordVectors.addVectorToRow(vec, i, 1.0 / norm);
         }
       }
     }
-    std::sort_heap(heap.begin(), heap.end(), comparePairs);
 
-    return heap;
-  }
-
-  std::vector<std::pair<real, std::string>> FastText::getAnalogies(
-      int32_t k,
-      const std::string &wordA,
-      const std::string &wordB,
-      const std::string &wordC)
-  {
-    Vector query = Vector(args_->dim);
-    query.zero();
-
-    Vector buffer(args_->dim);
-    getWordVector(buffer, wordA);
-    query.addVector(buffer, 1.0 / (buffer.norm() + 1e-8));
-    getWordVector(buffer, wordB);
-    query.addVector(buffer, -1.0 / (buffer.norm() + 1e-8));
-    getWordVector(buffer, wordC);
-    query.addVector(buffer, 1.0 / (buffer.norm() + 1e-8));
-
-    lazyComputeWordVectors();
-    assert(wordVectors_);
-    return getNN(*wordVectors_, query, k, {wordA, wordB, wordC});
-  }
-
-  void FastText::readFileDumpOutput(const std::string &filename)
-  {
-    std::ifstream ifs(filename);
-    if (!ifs.is_open()) {
-      throw std::invalid_argument(filename + " cannot be opened for training!");
+    void FastText::lazyComputeWordVectors() {
+      if (!wordVectors_) {
+        wordVectors_ = std::unique_ptr<DenseMatrix>(
+            new DenseMatrix(dict_->nwords(), args_->dim));
+        precomputeWordVectors(*wordVectors_);
+      }
     }
 
-    Model::State state(args_->dim, output_->size(0), args_->seed);
-    const int64_t ntokens = dict_->ntokens();
+    std::vector<std::pair<real, std::string>> FastText::getNN(
+        const std::string &word, int32_t k) {
+      Vector query(args_->dim);
 
-    std::vector<int32_t> line;
-    while(keepTraining(ntokens))
-      {
+      getWordVector(query, word);
+
+      lazyComputeWordVectors();
+      assert(wordVectors_);
+      return getNN(*wordVectors_, query, k, {word});
+    }
+
+    std::vector<std::pair<real, std::string>> FastText::getNN(
+        const DenseMatrix &wordVectors, const Vector &query, int32_t k,
+        const std::set<std::string> &banSet) {
+      std::vector<std::pair<real, std::string>> heap;
+
+      real queryNorm = query.norm();
+      if (std::abs(queryNorm) < 1e-8) {
+        queryNorm = 1;
+      }
+
+      for (int32_t i = 0; i < dict_->nwords(); i++) {
+        std::string word = dict_->getWord(i);
+        if (banSet.find(word) == banSet.end()) {
+          real dp = wordVectors.dotRow(query, i);
+          real similarity = dp / queryNorm;
+
+          if (heap.size() == k && similarity < heap.front().first) {
+            continue;
+          }
+          heap.push_back(std::make_pair(similarity, word));
+          std::push_heap(heap.begin(), heap.end(), comparePairs);
+          if (heap.size() > k) {
+            std::pop_heap(heap.begin(), heap.end(), comparePairs);
+            heap.pop_back();
+          }
+        }
+      }
+      std::sort_heap(heap.begin(), heap.end(), comparePairs);
+
+      return heap;
+    }
+
+    std::vector<std::pair<real, std::string>> FastText::getAnalogies(
+        int32_t k, const std::string &wordA, const std::string &wordB,
+        const std::string &wordC) {
+      Vector query = Vector(args_->dim);
+      query.zero();
+
+      Vector buffer(args_->dim);
+      getWordVector(buffer, wordA);
+      query.addVector(buffer, 1.0 / (buffer.norm() + 1e-8));
+      getWordVector(buffer, wordB);
+      query.addVector(buffer, -1.0 / (buffer.norm() + 1e-8));
+      getWordVector(buffer, wordC);
+      query.addVector(buffer, 1.0 / (buffer.norm() + 1e-8));
+
+      lazyComputeWordVectors();
+      assert(wordVectors_);
+      return getNN(*wordVectors_, query, k, {wordA, wordB, wordC});
+    }
+
+    void FastText::readFileDumpOutput(const std::string &filename) {
+      std::ifstream ifs(filename);
+      if (!ifs.is_open()) {
+        throw std::invalid_argument(filename +
+                                    " cannot be opened for training!");
+      }
+
+      Model::State state(args_->dim, output_->size(0), args_->seed);
+      const int64_t ntokens = dict_->ntokens();
+
+      std::vector<int32_t> line;
+      while (keepTraining(ntokens)) {
         tokenCount_ += dict_->getLine(ifs, line, state.rng);
 
         std::cout << "# [";
@@ -768,6 +760,15 @@ namespace fasttext
     utils::seek(ifs, threadId * utils::size(ifs) / args_->thread);
 
     Model::State state(args_->dim, output_->size(0), threadId + args_->seed);
+    Model::State big_state(args_->dim, output_->size(0), threadId + args_->seed);
+
+    // Create temp vectors for nn vecs
+    std::vector<std::shared_ptr<Vector>> temp_vectors;
+    int distill_nn_k = 5;
+    for(int i=0; i < distill_nn_k; i++) {
+      Vector new_vector(args_->dim);
+      temp_vectors.push_back(std::make_shared<Vector>(new_vector));
+    }
 
     const int64_t ntokens = dict_->ntokens();
     int64_t localTokenCount = 0;
@@ -801,7 +802,14 @@ namespace fasttext
         else if (args_->model == model_name::sg)
         {
           localTokenCount += dict_->getLine(ifs, line, state.rng);
-          skipgram(state, lr, line);
+          if(args_->distillFrom.empty())
+            {
+              skipgram(state, lr, line);
+            }
+          else
+            {
+              skipgramDistill(state, big_state, lr, line, temp_vectors);
+            }
         }
         if (localTokenCount > args_->lrUpdateRate)
         {
@@ -1103,4 +1111,4 @@ namespace fasttext
     return l.first > r.first;
   }
 
-} // namespace fasttext
+  } // namespace fasttext

@@ -9,7 +9,9 @@
 #include "loss.h"
 #include "utils.h"
 
+#include <chrono>
 #include <cmath>
+#include <iostream>
 
 namespace fasttext {
 
@@ -117,6 +119,21 @@ real BinaryLogisticLoss::binaryLogistic(
 void BinaryLogisticLoss::computeOutput(Model::State& state) const {
   Vector& output = state.output;
   output.mul(*wo_, state.hidden);
+  int32_t osz = output.size();
+  for (int32_t i = 0; i < osz; i++) {
+    output[i] = sigmoid(output[i]);
+  }
+}
+
+void BinaryLogisticLoss::computeOutputFast(
+    Model::State &state,
+    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &nn_id_word) const {
+
+  Vector &output = state.output;
+  Vector &hidden = state.hidden;
+
+  output.mulFast(*wo_, state.hidden, nn_id_word);
+
   int32_t osz = output.size();
   for (int32_t i = 0; i < osz; i++) {
     output[i] = sigmoid(output[i]);
@@ -342,5 +359,11 @@ real SoftmaxLoss::forward(
   }
   return -log(state.output[target]);
 };
+
+void SoftmaxLoss::computeOutputFast(Model::State &state,
+                    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &) const {
+                      std::cerr << "Fast output computing is not supported at softmax.\n";
+                      exit(1);
+                    }
 
 } // namespace fasttext

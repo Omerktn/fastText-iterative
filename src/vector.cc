@@ -12,6 +12,7 @@
 
 #include <cmath>
 #include <iomanip>
+#include <memory>
 
 #include "matrix.h"
 
@@ -70,6 +71,16 @@ void Vector::mul(const Matrix& A, const Vector& vec) {
   assert(A.size(1) == vec.size());
   for (int64_t i = 0; i < size(); i++) {
     data_[i] = A.dotRow(vec, i);
+  }
+}
+
+void Vector::mulFast(const Matrix &A, const Vector &vec,
+                     std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &nn_id_word) {
+  assert(A.size(0) == size());
+  assert(A.size(1) == vec.size());
+  (*this).zero();
+  for(auto pair : nn_id_word) {
+    data_[pair.first] = A.dotRow(*(pair.second), pair.first);
   }
 }
 

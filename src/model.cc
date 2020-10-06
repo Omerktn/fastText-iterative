@@ -41,26 +41,12 @@ Model::Model(
     : wi_(wi), wo_(wo), loss_(loss), normalizeGradient_(normalizeGradient) {}
 
 
-
 void Model::computeHidden(const std::vector<int32_t>& input, State& state)
     const {
   Vector& hidden = state.hidden;
   hidden.zero();
   for (auto it = input.cbegin(); it != input.cend(); ++it) {
     hidden.addRow(*wi_, *it);
-  }
-  hidden.mul(1.0 / input.size());
-}
-
-// Distillation compuatin for input -> hidden layer
-void Model::computeDistillHidden(const std::vector<int32_t> &input,
-                                 const std::shared_ptr<Matrix> big_wo,
-                                 State &state) const {
-  Vector &hidden = state.hidden;
-  hidden.zero();
-
-  for (auto it = input.cbegin(); it != input.cend(); ++it) {
-    hidden.addRow(*big_wo, *it);
   }
   hidden.mul(1.0 / input.size());
 }
@@ -107,13 +93,17 @@ void Model::update(
 }
 
   void Model::updateDistill(const std::vector<int32_t> &input,
-                   const std::vector<int32_t> &targets, int32_t targetIndex,
-                   const std::shared_ptr<Matrix> big_wo, real lr, State &state)
-{
-  if (input.size() == 0) {
-    return;
-  }
-  computeDistillHidden(input, big_wo, state);
+                            const std::vector<int32_t> &targets,
+                            int32_t targetIndex,
+                            Vector &big_output, real lr,
+                            State &state)
+  {
+    if (input.size() == 0) {
+      return;
+    }
+   Vector &hidden = state.hidden;
+   hidden.zero();
+   hidden.addVector(big_output);
 
   Vector &grad = state.grad;
   grad.zero();

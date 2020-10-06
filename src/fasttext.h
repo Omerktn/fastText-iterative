@@ -37,7 +37,7 @@ class FastText {
       std::function<void(float, float, double, double, int64_t)>;
 
   std::shared_ptr<FastText> big_fasttext;
-
+  void lazyComputeWordVectors();
 protected:
   std::shared_ptr<Args> args_;
   std::shared_ptr<Dictionary> dict_;
@@ -63,7 +63,7 @@ protected:
       const Vector& queryVec,
       int32_t k,
       const std::set<std::string>& banSet);
-  void lazyComputeWordVectors();
+  // lazyComputeWordVectors() was here.
   void printInfo(real, real, std::ostream&);
   std::shared_ptr<Matrix> getInputMatrixFromFile(const std::string&) const;
   std::shared_ptr<Matrix> createRandomMatrix() const;
@@ -77,6 +77,10 @@ protected:
       const std::vector<int32_t>& labels);
   void cbow(Model::State& state, real lr, const std::vector<int32_t>& line);
   void skipgram(Model::State& state, real lr, const std::vector<int32_t>& line);
+  void skipgramDistill(Model::State &state, Model::State &big_state,
+                       real lr, const std::vector<int32_t> &line,
+                       std::vector<std::shared_ptr<Vector>> &);
+
   std::vector<int32_t> selectEmbeddings(int32_t cutoff) const;
   void precomputeWordVectors(DenseMatrix& wordVectors);
   bool keepTraining(const int64_t ntokens) const;

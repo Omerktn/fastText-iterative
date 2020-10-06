@@ -519,6 +519,8 @@ void train(const std::vector<std::string> args) {
       fasttext->big_fasttext = std::make_shared<FastText>();
       fasttext->big_fasttext->loadModel(a.distillFrom);
       std::cout << "(#) Distillation model has loaded.\n";
+      fasttext->big_fasttext->lazyComputeWordVectors();
+      std::cout << "(#) Lazy computing has finished.\n";
     }
 
   if (a.hasAutotune()) {

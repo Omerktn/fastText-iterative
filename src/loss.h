@@ -47,13 +47,14 @@ class Loss {
       real lr,
       bool backprop) = 0;
   virtual void computeOutput(Model::State& state) const = 0;
+  virtual void
+  computeOutputFast(Model::State &state,
+                    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &) const = 0;
 
-  virtual void predict(
-      int32_t /*k*/,
-      real /*threshold*/,
-      Predictions& /*heap*/,
-      Model::State& /*state*/) const;
-};
+  virtual void predict(int32_t /*k*/, real /*threshold*/,
+                       Predictions & /*heap*/, Model::State &
+                       /*state*/) const;
+  };
 
 class BinaryLogisticLoss : public Loss {
  protected:
@@ -68,6 +69,9 @@ class BinaryLogisticLoss : public Loss {
   explicit BinaryLogisticLoss(std::shared_ptr<Matrix>& wo);
   virtual ~BinaryLogisticLoss() noexcept override = default;
   void computeOutput(Model::State& state) const override;
+  void
+  computeOutputFast(Model::State &state,
+                    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &) const override;
 };
 
 class OneVsAllLoss : public BinaryLogisticLoss {
@@ -158,6 +162,10 @@ class SoftmaxLoss : public Loss {
       real lr,
       bool backprop) override;
   void computeOutput(Model::State& state) const override;
+  void
+  computeOutputFast(Model::State &state,
+                    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &) const override;
+
 };
 
 } // namespace fasttext

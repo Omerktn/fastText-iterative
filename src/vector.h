@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <ostream>
 #include <vector>
+#include <memory>
 
 #include "real.h"
 
@@ -53,6 +54,8 @@ class Vector {
   void addRow(const Matrix&, int64_t);
   void addRow(const Matrix&, int64_t, real);
   void mul(const Matrix&, const Vector&);
+  void mulFast(const Matrix &A, const Vector &vec,
+               std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &);
   int64_t argmax();
 };
 
