@@ -56,5 +56,6 @@
         "condition_variable": "cpp",
         "future": "cpp",
         "mutex": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": true
 }

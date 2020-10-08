@@ -1,0 +1,12 @@
+            using namespace std::chrono; 
+
+  int64_t total = 0;
+  int count = 0;
+
+auto start = high_resolution_clock::now(); 
+auto stop = high_resolution_clock::now();
+
+auto duration = duration_cast<microseconds>(stop - start); 
+count++;
+total += duration.count();
+std::cout << "avg hidden:" << (int64_t)total/count << "us\n"; 

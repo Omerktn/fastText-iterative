@@ -9,6 +9,8 @@
 #include "fasttext.h"
 #include "loss.h"
 #include "quantmatrix.h"
+#include "time.h"
+#include "stdlib.h"
 
 #include <algorithm>
 #include <bits/stdint-intn.h>
@@ -21,6 +23,7 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#include <random>
 
 namespace fasttext
 {
@@ -483,12 +486,14 @@ namespace fasttext
     }
   }
 
+
   void FastText::skipgramDistill(
                                  Model::State &state,
                                  Model::State &big_state,
                                  real lr,
                                  const std::vector<int32_t> &line,
-                                 std::vector<std::shared_ptr<Vector>> &temp_vectors)
+                                 std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &temp_nn_vectors,
+                                 Vector &temp_out_vector)
   {
     std::uniform_int_distribution<> uniform(1, args_->ws);
     for (int32_t w = 0; w < line.size(); w++)
@@ -500,29 +505,74 @@ namespace fasttext
         if (c != 0 && w + c >= 0 && w + c < line.size())
           {
             big_fasttext->model_->computeHidden(ngrams, big_state);
-            //big_fasttext->model_->loss_->forward(line, w + c, big_state, lr, true);
 
-            Vector out_word_vec(big_fasttext->args_->dim);
-            big_fasttext->getWordVector(out_word_vec, big_fasttext->dict_->getWord(line[w + c]));
+/*
+            std::string out_word = big_fasttext->dict_->getWord(line[w + c]);
+            big_fasttext->getWordVector(temp_out_vector, out_word);
+            
+            auto nn_result = big_fasttext->getNN(*big_fasttext->wordVectors_, temp_out_vector, distill_nn_k,
+                                                 {out_word});
 
-            auto nn_result = big_fasttext->getNN(*big_fasttext->wordVectors_, out_word_vec, 5,
-                                                 {big_fasttext->dict_->getWord(line[w + c])});
-
-            std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> nn_id_word;
-            for (int i=0; i < 5; i++) {
+            for (int i=0; i < distill_nn_k; i++) {
               auto nn_pair = nn_result[i];
-              getWordVector(*(temp_vectors[0]), nn_pair.second);
-              nn_id_word.push_back(std::make_pair(dict_->getId(nn_pair.second), temp_vectors[0]));
+              getWordVector(*(temp_nn_vectors[i].second), nn_pair.second);
+              temp_nn_vectors[i].first = dict_->getId(nn_pair.second);
+            }
+*/
+            int32_t word_id = line[w + c];
+
+            for(int i=0; i < NN_SIZE; i++) {
+              int32_t neighbor_id = (*big_fasttext->computed_nn)[word_id][i];
+              temp_nn_vectors[i].first = neighbor_id;
+              big_fasttext->getWordVector(*(temp_nn_vectors[i].second), big_fasttext->dict_->getWord(neighbor_id));
             }
 
-            big_fasttext->model_->loss_->computeOutputFast(big_state, nn_id_word);
+            big_fasttext->model_->loss_->computeOutputFast(big_state, temp_nn_vectors);
 
-            model_->updateDistill(ngrams, line, w + c,
-                                  big_state.output, lr, state);
+            model_->updateDistill(ngrams, line, w + c, big_state.output, lr, state);
         }
       }
     }
   }
+
+
+    void FastText::precomputeNN() {
+      std::cout << "(#) NN precomputing has begun. This my take time.\n";
+
+      using namespace std::chrono;
+      steady_clock::time_point begin = steady_clock::now();
+      std::cout << std::setprecision(3);
+
+      std::vector<std::array<int32_t, NN_SIZE>> nn_list;
+      std::array<int32_t, NN_SIZE> temp_array;
+      Vector temp_vector(args_->dim);
+
+      for (int32_t i = 0; i < dict_->nwords(); i++) { 
+        std::string word = dict_->getWord(i);
+        getWordVector(temp_vector, word);
+            
+        auto nn_result = getNN(*wordVectors_, temp_vector, NN_SIZE, {word});
+
+        for(int32_t k = 0; k < NN_SIZE; k++) {
+          temp_array[k] = getWordId(nn_result[k].second);
+        }
+
+        nn_list.push_back(temp_array);
+
+        if (i % 100 == 1) {
+          int64_t elapsed_time = duration_cast<seconds>(steady_clock::now() - begin).count();
+          int64_t remaining_time = (int64_t) (((dict_->nwords() - i) / i) * elapsed_time);
+
+          std::cout << "(#) " << i << " / " << dict_->nwords() 
+                    << " [" << (double)(i/dict_->nwords())*100 << "% completed] [Elapsed time: "
+                    << (double)elapsed_time/60 << " min] [Remaining time: " 
+                    << (double)remaining_time/60 << " min]\r";
+        }
+      }
+
+      computed_nn = std::make_shared<std::vector<std::array<int32_t, NN_SIZE>>>(nn_list);
+      std::cout << "(#) NN precomputing completed.\n";
+    }
 
     std::tuple<int64_t, double, double> FastText::test(
         std::istream & in, int32_t k, real threshold) {
@@ -672,6 +722,7 @@ namespace fasttext
       return getNN(*wordVectors_, query, k, {word});
     }
 
+
     std::vector<std::pair<real, std::string>> FastText::getNN(
         const DenseMatrix &wordVectors, const Vector &query, int32_t k,
         const std::set<std::string> &banSet) {
@@ -761,14 +812,15 @@ namespace fasttext
 
     Model::State state(args_->dim, output_->size(0), threadId + args_->seed);
     Model::State big_state(args_->dim, output_->size(0), threadId + args_->seed);
+    srand(time(NULL));
 
     // Create temp vectors for nn vecs
-    std::vector<std::shared_ptr<Vector>> temp_vectors;
-    int distill_nn_k = 5;
-    for(int i=0; i < distill_nn_k; i++) {
-      Vector new_vector(args_->dim);
-      temp_vectors.push_back(std::make_shared<Vector>(new_vector));
+    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> temp_nn_vectors;
+    Vector new_vector(args_->dim);
+    for(int i=0; i < NN_SIZE; i++) {
+      temp_nn_vectors.push_back(std::make_pair(0, std::make_shared<Vector>(new_vector)));
     }
+    Vector temp_out_vector(big_fasttext->args_->dim);
 
     const int64_t ntokens = dict_->ntokens();
     int64_t localTokenCount = 0;
@@ -808,7 +860,7 @@ namespace fasttext
             }
           else
             {
-              skipgramDistill(state, big_state, lr, line, temp_vectors);
+              skipgramDistill(state, big_state, lr, line, temp_nn_vectors, temp_out_vector);
             }
         }
         if (localTokenCount > args_->lrUpdateRate)

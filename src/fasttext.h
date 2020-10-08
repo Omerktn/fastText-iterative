@@ -29,6 +29,8 @@
 #include "utils.h"
 #include "vector.h"
 
+#define NN_SIZE 5
+
 namespace fasttext {
 
 class FastText {
@@ -37,7 +39,10 @@ class FastText {
       std::function<void(float, float, double, double, int64_t)>;
 
   std::shared_ptr<FastText> big_fasttext;
+  std::shared_ptr<std::vector<std::array<int32_t, NN_SIZE>>> computed_nn;
   void lazyComputeWordVectors();
+  void precomputeNN();
+
 protected:
   std::shared_ptr<Args> args_;
   std::shared_ptr<Dictionary> dict_;
@@ -63,6 +68,7 @@ protected:
       const Vector& queryVec,
       int32_t k,
       const std::set<std::string>& banSet);
+
   // lazyComputeWordVectors() was here.
   void printInfo(real, real, std::ostream&);
   std::shared_ptr<Matrix> getInputMatrixFromFile(const std::string&) const;
@@ -79,7 +85,8 @@ protected:
   void skipgram(Model::State& state, real lr, const std::vector<int32_t>& line);
   void skipgramDistill(Model::State &state, Model::State &big_state,
                        real lr, const std::vector<int32_t> &line,
-                       std::vector<std::shared_ptr<Vector>> &);
+                       std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &,
+                       Vector &temp_out_vector);
 
   std::vector<int32_t> selectEmbeddings(int32_t cutoff) const;
   void precomputeWordVectors(DenseMatrix& wordVectors);

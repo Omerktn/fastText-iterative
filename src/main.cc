@@ -521,6 +521,7 @@ void train(const std::vector<std::string> args) {
       std::cout << "(#) Distillation model has loaded.\n";
       fasttext->big_fasttext->lazyComputeWordVectors();
       std::cout << "(#) Lazy computing has finished.\n";
+      fasttext->big_fasttext->precomputeNN();
     }
 
   if (a.hasAutotune()) {
