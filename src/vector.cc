@@ -13,6 +13,7 @@
 #include <cmath>
 #include <iomanip>
 #include <memory>
+#include <iostream>
 
 #include "matrix.h"
 

@@ -9,7 +9,6 @@
 #include "fasttext.h"
 #include "loss.h"
 #include "quantmatrix.h"
-#include "time.h"
 #include "stdlib.h"
 
 #include <algorithm>
@@ -506,29 +505,16 @@ namespace fasttext
           {
             big_fasttext->model_->computeHidden(ngrams, big_state);
 
-/*
-            std::string out_word = big_fasttext->dict_->getWord(line[w + c]);
-            big_fasttext->getWordVector(temp_out_vector, out_word);
-            
-            auto nn_result = big_fasttext->getNN(*big_fasttext->wordVectors_, temp_out_vector, distill_nn_k,
-                                                 {out_word});
-
-            for (int i=0; i < distill_nn_k; i++) {
-              auto nn_pair = nn_result[i];
-              getWordVector(*(temp_nn_vectors[i].second), nn_pair.second);
-              temp_nn_vectors[i].first = dict_->getId(nn_pair.second);
-            }
-*/
             int32_t word_id = line[w + c];
 
             for(int i=0; i < NN_SIZE; i++) {
-              int32_t neighbor_id = (*big_fasttext->computed_nn)[word_id][i];
+              int32_t neighbor_id = (*(big_fasttext->computed_nn))[word_id][i];
               temp_nn_vectors[i].first = neighbor_id;
               big_fasttext->getWordVector(*(temp_nn_vectors[i].second), big_fasttext->dict_->getWord(neighbor_id));
             }
 
             big_fasttext->model_->loss_->computeOutputFast(big_state, temp_nn_vectors);
-
+            
             model_->updateDistill(ngrams, line, w + c, big_state.output, lr, state);
         }
       }
@@ -581,6 +567,54 @@ namespace fasttext
 
       return std::tuple<int64_t, double, double>(
           meter.nexamples(), meter.precision(), meter.recall());
+    }
+
+    void FastText::getNNFromFile(std::string &filename) {
+      std::ifstream in(filename);
+      std::string word;
+      std::vector<std::array<int32_t, NN_SIZE>> nn_arrays;
+      std::array<int32_t, NN_SIZE> temp_array;
+
+      if(!in.good()) {
+        throw std::runtime_error(filename + " does not exist.");
+      }
+
+      for(int i = 0; i < dict_->nwords(); i++) {
+        for(int k = 0; k < NN_SIZE; k++) {
+          in >> word;
+          temp_array[k] = std::stoi(word);
+
+          if(temp_array[k] >= dict_->nwords()) {
+            std::cout << "Mistaken numbers in the NN file :" << temp_array[k] << "\n";
+          }
+        }
+        nn_arrays.push_back(temp_array);
+
+        if (in.eof() && i != (dict_->nwords() - 1)) {
+          throw std::runtime_error("computedNN file has " + std::to_string(i) 
+                                   + " lines. Expected:" + std::to_string(dict_->nwords()));
+        }
+      }
+
+      computed_nn = std::make_shared<std::vector<std::array<int32_t, NN_SIZE>>> (nn_arrays);
+    }
+
+    void FastText::saveNN(std::string &filename) {
+      std::ofstream out(filename);
+
+      for(int i = 0; i < dict_->nwords(); i++) {
+        for(int k = 0; k < NN_SIZE; k++) {
+          std::string s = std::to_string((*computed_nn)[i][k]);
+          if (!s.empty() && s[s.length()-1] == '\n') {
+            s.erase(s.length()-1);
+          }
+          out << s << " ";
+        }
+        out << "\n";
+      }
+      out.close();
+
+      std::cout << "NN file created to " << filename << "\n";
     }
 
     void FastText::test(std::istream & in, int32_t k, real threshold,
@@ -811,12 +845,11 @@ namespace fasttext
     utils::seek(ifs, threadId * utils::size(ifs) / args_->thread);
 
     Model::State state(args_->dim, output_->size(0), threadId + args_->seed);
-    Model::State big_state(args_->dim, output_->size(0), threadId + args_->seed);
-    srand(time(NULL));
+    Model::State big_state(big_fasttext->args_->dim, big_fasttext->output_->size(0), threadId + args_->seed);
 
     // Create temp vectors for nn vecs
     std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> temp_nn_vectors;
-    Vector new_vector(args_->dim);
+    Vector new_vector(big_fasttext->args_->dim);
     for(int i=0; i < NN_SIZE; i++) {
       temp_nn_vectors.push_back(std::make_pair(0, std::make_shared<Vector>(new_vector)));
     }

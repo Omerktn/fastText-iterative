@@ -149,6 +149,12 @@ void printDumpUsage() {
             << "  <option>     option from args,dict,input,output" << std::endl;
 }
 
+void printSaveNNUsage() {
+  std::cout << "usage: fasttext save-nn <model> <outpath>\n\n"
+            << "  <model>      model filename\n"
+            << "  <outpath>    where NN file will save" << std::endl;
+}
+
 void test(const std::vector<std::string>& args) {
   bool perLabel = args[1] == "test-label";
 
@@ -428,6 +434,27 @@ static void calculateAnalogyPredictions(FastText *ft, std::string analogy_folder
             << std::setprecision(4) << (double) totalCorrect / totalCount << std::endl;
 }
 
+void computeAndSaveNN(const std::vector<std::string> args) {
+  std::string modelpath, outfile;
+  if (args.size() == 4) {
+    modelpath = args[2];
+    outfile = args[3];
+  }
+  else {
+    printSaveNNUsage();
+    exit(EXIT_FAILURE);
+  }
+
+  FastText fasttext;
+  std::string model(modelpath);
+  std::cout << "Loading model " << model << std::endl;
+  fasttext.loadModel(model);
+
+  fasttext.lazyComputeWordVectors();
+  fasttext.precomputeNN();
+  fasttext.saveNN(outfile);
+}
+
 void testAnalogies(const std::vector<std::string> args) {
   std::string analogy_folder;
   if (args.size() == 4) {
@@ -521,7 +548,13 @@ void train(const std::vector<std::string> args) {
       std::cout << "(#) Distillation model has loaded.\n";
       fasttext->big_fasttext->lazyComputeWordVectors();
       std::cout << "(#) Lazy computing has finished.\n";
-      fasttext->big_fasttext->precomputeNN();
+
+      if(a.precomputedNN.empty()) {
+        fasttext->big_fasttext->precomputeNN();
+      } else {
+        fasttext->big_fasttext->getNNFromFile(a.precomputedNN);
+        std::cout << "(#) NNs got from file.\n";
+      }  
     }
 
   if (a.hasAutotune()) {
@@ -597,6 +630,8 @@ int main(int argc, char** argv) {
     testAnalogies(args);
   } else if (command == "show-output") {
     showModelOutputs(args);
+  } else if (command == "save-nn") {
+    computeAndSaveNN(args);
   } else if (command == "predict" || command == "predict-prob") {
     predict(args);
   } else if (command == "dump") {

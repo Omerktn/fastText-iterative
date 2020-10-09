@@ -80,6 +80,7 @@ namespace fasttext
     int incVectors;
     int expandMethod;
     std::string distillFrom;
+    std::string precomputedNN;
 
     std::string autotuneValidationFile;
     std::string autotuneMetric;

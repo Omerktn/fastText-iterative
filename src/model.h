@@ -76,7 +76,8 @@ public:
                      State &state);
 
   void computeHidden(const std::vector<int32_t> &input, State &state) const;
-
+  void computeHiddenFloating(Vector &big_output, State& state) const;
+  
   real std_log(real) const;
 
   static const int32_t kUnlimitedPredictions = -1;

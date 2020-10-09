@@ -42,7 +42,9 @@ class FastText {
   std::shared_ptr<std::vector<std::array<int32_t, NN_SIZE>>> computed_nn;
   void lazyComputeWordVectors();
   void precomputeNN();
-
+  void getNNFromFile(std::string& filename);
+  void saveNN(std::string &filename);
+  
 protected:
   std::shared_ptr<Args> args_;
   std::shared_ptr<Dictionary> dict_;

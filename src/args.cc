@@ -51,6 +51,7 @@ namespace fasttext
     incVectors = 0;
     expandMethod = 0;
     distillFrom = "";
+    precomputedNN = "";
 
     autotuneValidationFile = "";
     autotuneMetric = "f1";
@@ -314,6 +315,10 @@ namespace fasttext
         else if (args[ai] == "-distillFrom")
         {
           distillFrom = std::string(args.at(ai + 1));
+        }
+        else if (args[ai] == "-precomputedNN")
+        {
+          precomputedNN = std::string(args.at(ai + 1));
         }
         else if (args[ai] == "-expandMethod")
         {

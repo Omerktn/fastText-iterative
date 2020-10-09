@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include <iostream>
 
 namespace fasttext {
 
@@ -40,6 +41,15 @@ Model::Model(
     bool normalizeGradient)
     : wi_(wi), wo_(wo), loss_(loss), normalizeGradient_(normalizeGradient) {}
 
+
+void Model::computeHiddenFloating(Vector &big_output, State& state) const {
+  Vector& hidden = state.hidden;
+  hidden.zero();
+  for(int i = 0; i < big_output.size(); i++) {
+    hidden.addRow(*wi_, i, big_output[i]);
+  }
+  //hidden.mul(1.0 / big_output.size());
+}
 
 void Model::computeHidden(const std::vector<int32_t>& input, State& state)
     const {
@@ -92,18 +102,22 @@ void Model::update(
   }
 }
 
-  void Model::updateDistill(const std::vector<int32_t> &input,
-                            const std::vector<int32_t> &targets,
-                            int32_t targetIndex,
-                            Vector &big_output, real lr,
-                            State &state)
+  void Model::updateDistill(
+    const std::vector<int32_t> &input,
+    const std::vector<int32_t> &targets,
+    int32_t targetIndex,
+    Vector &big_output, real lr,
+    State &state)
   {
     if (input.size() == 0) {
       return;
     }
-   Vector &hidden = state.hidden;
-   hidden.zero();
-   hidden.addVector(big_output);
+  /*
+  Vector &hidden = state.hidden;
+  hidden.zero();
+  hidden.addVector(big_output);
+  */
+  computeHiddenFloating(big_output, state);
 
   Vector &grad = state.grad;
   grad.zero();

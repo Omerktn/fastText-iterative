@@ -148,6 +148,9 @@ entry_type Dictionary::getType(const std::string& w) const {
 
 std::string Dictionary::getWord(int32_t id) const {
   assert(id >= 0);
+  if(id >= size_) {
+    std::cout << "Will assert error: id:" << id << "\n";
+  }
   assert(id < size_);
   return words_[id].word;
 }
