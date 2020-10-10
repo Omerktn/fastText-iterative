@@ -519,7 +519,7 @@ namespace fasttext
             
             //std::cout << "Output head:" << big_state.output[0] << big_state.output[1] << big_state.output[2] << big_state.output[3] << "\n";
 
-            model_->updateDistill(ngrams, line, w + c, big_state.output, lr, state);
+            model_->updateDistill(ngrams, line, w + c, big_state.output, lr, state, temp_nn_vectors);
         }
       }
     }

@@ -42,18 +42,20 @@ Model::Model(
     : wi_(wi), wo_(wo), loss_(loss), normalizeGradient_(normalizeGradient) {}
 
 
-void Model::computeHiddenFloating(Vector &big_output, State& state) const {
+void Model::computeHiddenFloating(
+  Vector &big_output, 
+  State& state,
+  std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &nn_id_vector)
+    const {
+
   Vector& hidden = state.hidden;
   hidden.zero();
-  int32_t non05count = 0;
-  for(int i = 0; i < big_output.size(); i++) {
-    if (big_output[i] == 0.5) {
-      continue;
-    }
-    non05count++;
-    hidden.addRow(*wi_, i, big_output[i]);
-  }
-  hidden.mul(1.0 / non05count);
+
+ for(auto pair : nn_id_vector) {
+   hidden.addRow(*wi_, pair.first, big_output[pair.first]);
+ }
+
+ hidden.mul(1.0 / nn_id_vector.size());
 }
 
 void Model::computeHidden(const std::vector<int32_t>& input, State& state)
@@ -112,13 +114,14 @@ void Model::update(
     const std::vector<int32_t> &targets,
     int32_t targetIndex,
     Vector &big_output, real lr,
-    State &state)
+    State &state,
+    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &nn_id_vector)
   {
     if (input.size() == 0) {
       return;
     }
     
-  computeHiddenFloating(big_output, state);
+  computeHiddenFloating(big_output, state, nn_id_vector);
 
   Vector &grad = state.grad;
   grad.zero();
