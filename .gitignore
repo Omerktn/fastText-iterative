@@ -12,3 +12,4 @@ website/node_modules/
 package-lock.json
 node_modules/
 nnfiles/
+build/

@@ -132,7 +132,7 @@ void BinaryLogisticLoss::computeOutputFast(
   Vector &output = state.output;
   Vector &hidden = state.hidden;
 
-  output.mulFast(*wo_, state.hidden, nn_id_word);
+  output.mulFast(*wo_, hidden, nn_id_word);
 
   int32_t osz = output.size();
   for (int32_t i = 0; i < osz; i++) {

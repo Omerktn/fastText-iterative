@@ -504,6 +504,7 @@ namespace fasttext
         if (c != 0 && w + c >= 0 && w + c < line.size())
           {
             big_fasttext->model_->computeHidden(ngrams, big_state);
+            //std::cout << "#\nHidden head:" << big_state.hidden[0] << big_state.hidden[1] << big_state.hidden[2] << "\n";
 
             int32_t word_id = line[w + c];
 
@@ -512,9 +513,12 @@ namespace fasttext
               temp_nn_vectors[i].first = neighbor_id;
               big_fasttext->getWordVector(*(temp_nn_vectors[i].second), big_fasttext->dict_->getWord(neighbor_id));
             }
+            //std::cout << "Neighbor vector:" << (*temp_nn_vectors[0].second)[0] << (*temp_nn_vectors[0].second)[1] << "\n";
 
             big_fasttext->model_->loss_->computeOutputFast(big_state, temp_nn_vectors);
             
+            //std::cout << "Output head:" << big_state.output[0] << big_state.output[1] << big_state.output[2] << big_state.output[3] << "\n";
+
             model_->updateDistill(ngrams, line, w + c, big_state.output, lr, state);
         }
       }

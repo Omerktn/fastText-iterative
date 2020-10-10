@@ -45,10 +45,15 @@ Model::Model(
 void Model::computeHiddenFloating(Vector &big_output, State& state) const {
   Vector& hidden = state.hidden;
   hidden.zero();
+  int32_t non05count = 0;
   for(int i = 0; i < big_output.size(); i++) {
+    if (big_output[i] == 0.5) {
+      continue;
+    }
+    non05count++;
     hidden.addRow(*wi_, i, big_output[i]);
   }
-  //hidden.mul(1.0 / big_output.size());
+  hidden.mul(1.0 / non05count);
 }
 
 void Model::computeHidden(const std::vector<int32_t>& input, State& state)
@@ -112,11 +117,7 @@ void Model::update(
     if (input.size() == 0) {
       return;
     }
-  /*
-  Vector &hidden = state.hidden;
-  hidden.zero();
-  hidden.addVector(big_output);
-  */
+    
   computeHiddenFloating(big_output, state);
 
   Vector &grad = state.grad;
