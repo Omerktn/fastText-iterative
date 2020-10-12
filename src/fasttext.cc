@@ -488,11 +488,9 @@ namespace fasttext
 
   void FastText::skipgramDistill(
                                  Model::State &state,
-                                 Model::State &big_state,
                                  real lr,
                                  const std::vector<int32_t> &line,
-                                 std::vector<int32_t> &more_target,
-                                 Vector &temp_out_vector)
+                                 std::vector<int32_t> &more_target)
   {
     std::uniform_int_distribution<> uniform(1, args_->ws);
     for (int32_t w = 0; w < line.size(); w++)
@@ -509,7 +507,6 @@ namespace fasttext
               int32_t neighbor_id = (*(big_fasttext->computed_nn))[word_id][i];
               more_target[i] = neighbor_id;
             }
-            more_target[NN_SIZE] = word_id;
             
             model_->updateWithMoreTarget(ngrams, line, w + c, more_target, lr, state);
         }
@@ -841,14 +838,13 @@ namespace fasttext
     utils::seek(ifs, threadId * utils::size(ifs) / args_->thread);
 
     Model::State state(args_->dim, output_->size(0), threadId + args_->seed);
-    Model::State big_state(big_fasttext->args_->dim, big_fasttext->output_->size(0), threadId + args_->seed);
+    //Model::State big_state(big_fasttext->args_->dim, big_fasttext->output_->size(0), threadId + args_->seed);
 
     // Create temp vectors for nn vecs
     std::vector<int32_t> temp_nn_vector;
-    for(int i = 0; i < NN_SIZE + 1; i++) {
+    for(int i = 0; i < NN_SIZE; i++) {
       temp_nn_vector.push_back(0);
     }
-    Vector temp_out_vector(big_fasttext->args_->dim);
 
     const int64_t ntokens = dict_->ntokens();
     int64_t localTokenCount = 0;
@@ -888,7 +884,7 @@ namespace fasttext
             }
           else
             {
-              skipgramDistill(state, big_state, lr, line, temp_nn_vector, temp_out_vector);
+              skipgramDistill(state, lr, line, temp_nn_vector);
             }
         }
         if (localTokenCount > args_->lrUpdateRate)
