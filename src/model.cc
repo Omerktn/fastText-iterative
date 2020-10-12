@@ -109,6 +109,36 @@ void Model::update(
   }
 }
 
+void Model::updateWithMoreTarget(
+    const std::vector<int32_t>& input,
+    const std::vector<int32_t>& targets,
+    int32_t targetIndex,
+    const std::vector<int32_t>& moreTargets,
+    real lr,
+    State& state) {
+  if (input.size() == 0) {
+    return;
+  }
+  computeHidden(input, state);
+
+  Vector& grad = state.grad;
+  grad.zero();
+
+  real lossValue = loss_->forward(targets, targetIndex, state, lr, true);
+  for (int t = 0; t < moreTargets.size(); t++)
+  {
+    lossValue += loss_->forward(moreTargets, t, state, lr, true);
+  }
+  state.incrementNExamples(lossValue);
+
+  if (normalizeGradient_) {
+    grad.mul(1.0 / input.size());
+  }
+  for (auto it = input.cbegin(); it != input.cend(); ++it) {
+    wi_->addVectorToRow(grad, *it, 1.0);
+  }
+}
+
   void Model::updateDistill(
     const std::vector<int32_t> &input,
     const std::vector<int32_t> &targets,

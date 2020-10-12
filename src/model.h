@@ -68,6 +68,13 @@ public:
               const std::vector<int32_t> &targets, int32_t targetIndex, real lr,
               State &state);
 
+  void updateWithMoreTarget(const std::vector<int32_t>& input,
+                            const std::vector<int32_t>& targets,
+                            int32_t targetIndex,
+                            const std::vector<int32_t>& moreTargets,
+                            real lr,
+                            State& state);
+
   void updateDistill(const std::vector<int32_t> &input,
                      const std::vector<int32_t> &targets,
                      int32_t targetIndex,

@@ -87,7 +87,7 @@ protected:
   void skipgram(Model::State& state, real lr, const std::vector<int32_t>& line);
   void skipgramDistill(Model::State &state, Model::State &big_state,
                        real lr, const std::vector<int32_t> &line,
-                       std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &,
+                       std::vector<int32_t> &target_indexes,
                        Vector &temp_out_vector);
 
   std::vector<int32_t> selectEmbeddings(int32_t cutoff) const;

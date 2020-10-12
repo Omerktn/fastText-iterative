@@ -491,7 +491,7 @@ namespace fasttext
                                  Model::State &big_state,
                                  real lr,
                                  const std::vector<int32_t> &line,
-                                 std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &temp_nn_vectors,
+                                 std::vector<int32_t> &more_target,
                                  Vector &temp_out_vector)
   {
     std::uniform_int_distribution<> uniform(1, args_->ws);
@@ -503,30 +503,22 @@ namespace fasttext
         {
         if (c != 0 && w + c >= 0 && w + c < line.size())
           {
-            big_fasttext->model_->computeHidden(ngrams, big_state);
-            //std::cout << "#\nHidden head:" << big_state.hidden[0] << big_state.hidden[1] << big_state.hidden[2] << "\n";
-
             int32_t word_id = line[w + c];
 
             for(int i=0; i < NN_SIZE; i++) {
               int32_t neighbor_id = (*(big_fasttext->computed_nn))[word_id][i];
-              temp_nn_vectors[i].first = neighbor_id;
-              big_fasttext->getWordVector(*(temp_nn_vectors[i].second), big_fasttext->dict_->getWord(neighbor_id));
+              more_target[i] = neighbor_id;
             }
-            //std::cout << "Neighbor vector:" << (*temp_nn_vectors[0].second)[0] << (*temp_nn_vectors[0].second)[1] << "\n";
-
-            big_fasttext->model_->loss_->computeOutputFast(big_state, temp_nn_vectors);
+            more_target[NN_SIZE] = word_id;
             
-            //std::cout << "Output head:" << big_state.output[0] << big_state.output[1] << big_state.output[2] << big_state.output[3] << "\n";
-
-            model_->updateDistill(ngrams, line, w + c, big_state.output, lr, state, temp_nn_vectors);
+            model_->updateWithMoreTarget(ngrams, line, w + c, more_target, lr, state);
         }
       }
     }
   }
 
 
-    void FastText::precomputeNN() {
+  void FastText::precomputeNN() {
       std::cout << "(#) NN precomputing has begun. This my take time.\n";
 
       using namespace std::chrono;
@@ -852,10 +844,9 @@ namespace fasttext
     Model::State big_state(big_fasttext->args_->dim, big_fasttext->output_->size(0), threadId + args_->seed);
 
     // Create temp vectors for nn vecs
-    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> temp_nn_vectors;
-    Vector new_vector(big_fasttext->args_->dim);
-    for(int i=0; i < NN_SIZE; i++) {
-      temp_nn_vectors.push_back(std::make_pair(0, std::make_shared<Vector>(new_vector)));
+    std::vector<int32_t> temp_nn_vector;
+    for(int i = 0; i < NN_SIZE + 1; i++) {
+      temp_nn_vector.push_back(0);
     }
     Vector temp_out_vector(big_fasttext->args_->dim);
 
@@ -897,7 +888,7 @@ namespace fasttext
             }
           else
             {
-              skipgramDistill(state, big_state, lr, line, temp_nn_vectors, temp_out_vector);
+              skipgramDistill(state, big_state, lr, line, temp_nn_vector, temp_out_vector);
             }
         }
         if (localTokenCount > args_->lrUpdateRate)
