@@ -75,19 +75,7 @@ public:
                             real lr,
                             State& state);
 
-  void updateDistill(const std::vector<int32_t> &input,
-                     const std::vector<int32_t> &targets,
-                     int32_t targetIndex,
-                     Vector &big_output,
-                     real lr,
-                     State &state,
-                     std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &nn_id_vector);
-
   void computeHidden(const std::vector<int32_t> &input, State &state) const;
-  void computeHiddenFloating(
-    Vector &big_output,
-    State& state,
-    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &nn_id_vector) const;
   
   real std_log(real) const;
 

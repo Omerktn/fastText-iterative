@@ -41,23 +41,6 @@ Model::Model(
     bool normalizeGradient)
     : wi_(wi), wo_(wo), loss_(loss), normalizeGradient_(normalizeGradient) {}
 
-
-void Model::computeHiddenFloating(
-  Vector &big_output, 
-  State& state,
-  std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &nn_id_vector)
-    const {
-
-  Vector& hidden = state.hidden;
-  hidden.zero();
-
- for(auto pair : nn_id_vector) {
-   hidden.addRow(*wi_, pair.first, big_output[pair.first]);
- }
-
- hidden.mul(1.0 / nn_id_vector.size());
-}
-
 void Model::computeHidden(const std::vector<int32_t>& input, State& state)
     const {
   Vector& hidden = state.hidden;
@@ -129,33 +112,6 @@ void Model::updateWithMoreTarget(
   {
     lossValue += loss_->forward(moreTargets, t, state, lr, true);
   }
-  state.incrementNExamples(lossValue);
-
-  if (normalizeGradient_) {
-    grad.mul(1.0 / input.size());
-  }
-  for (auto it = input.cbegin(); it != input.cend(); ++it) {
-    wi_->addVectorToRow(grad, *it, 1.0);
-  }
-}
-
-  void Model::updateDistill(
-    const std::vector<int32_t> &input,
-    const std::vector<int32_t> &targets,
-    int32_t targetIndex,
-    Vector &big_output, real lr,
-    State &state,
-    std::vector<std::pair<int32_t, std::shared_ptr<Vector>>> &nn_id_vector)
-  {
-    if (input.size() == 0) {
-      return;
-    }
-    
-  computeHiddenFloating(big_output, state, nn_id_vector);
-
-  Vector &grad = state.grad;
-  grad.zero();
-  real lossValue = loss_->forward(targets, targetIndex, state, lr, true);
   state.incrementNExamples(lossValue);
 
   if (normalizeGradient_) {
