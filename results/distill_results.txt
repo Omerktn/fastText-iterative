@@ -1,0 +1,26 @@
+dim 50 baseline:
+./models/enwik_e15_d50.bin
+Elapsed Time: 204.7 second.
+Mean accuracy: 0.1263% 
+
+/models/distill_e15_d50.bin (hatalı isim d=30)
+Elapsed Time: 123.9 second.
+Mean accuracy: 0.08489%  
+
+
+dim 100 baseline:
+./models/enwik_e15_d100.bin
+Elapsed Time: 473.2 second.
+Mean accuracy: 0.1729% 
+
+./models/distill_e15_d100t80.bin
+Elapsed Time: 269.5 second.
+Mean accuracy: 0.1717%    
+
+./models/distill_e15_d100t70.bin
+Elapsed Time: 212.2 second.
+Mean accuracy: 0.165%    
+
+./models/distill_e15_d100t60.bin
+Elapsed Time: 217.8 second.
+Mean accuracy: 0.1411% 
