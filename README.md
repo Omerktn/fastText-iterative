@@ -20,6 +20,7 @@ $ ./fasttext test-analogies <model> <folder> <k>
 It will start a thread for each text file in the directory. 
 ```
 $ ./fasttext test-analogies ./models/enwik_e15_d200.bin ../analogy_test
+
 Loading model ./models/enwik_e15_d200.bin
 [              gram2-opposite.txt ] has started.
 [           gram3-comparative.txt ] has started.
@@ -62,7 +63,7 @@ Our distillation method performs as follows.
  
  #### Example
  
- Let's say you have a big model with 100 dimension. First, create a precomputed nn file using the command mentioned above. In order to create a 60 dimension model with using the distillation method, run:
+ Let's say you have a big model with 100 dimension. First, create a precomputed nn file using the command mentioned above (This is optional but saves time in multiple uses). In order to create a 60 dimension model with using the distillation method, run:
  
  ```
  $ ./fasttext skipgram -input ./your_data -output ./small_model_dim60 -dim 60 -distillFrom ./models/my_big_model_dim100.bin -precomputedNN ./nnfiles/my_big_model_dim100.nn
