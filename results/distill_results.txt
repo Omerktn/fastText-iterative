@@ -43,3 +43,14 @@ Mean accuracy: 0.1547%
 ./models/distill_fllw_e15_d100t50.bin
 Elapsed Time: 168.2 second.
 Mean accuracy: 0.1369% 
+
+
+############################################################3
+
+./models/enwik_e15_d200.bin
+Elapsed Time: 527.1 second.
+Mean accuracy: 0.2377%    
+
+./models/distill_e15_d200t180.bin
+Elapsed Time: 537.9 second.
+Mean accuracy: 0.2323%  

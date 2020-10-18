@@ -543,7 +543,7 @@ namespace fasttext
           int64_t remaining_time = (int64_t) (((double)(dict_->nwords() - i) / i) * (elapsed_time));
 
           std::cout << "(#) " << i << " / " << dict_->nwords() 
-                    << " [" << (double)(i/dict_->nwords())*100 << "% completed] [Elapsed time: "
+                    << " [" << ((double) i / dict_->nwords())*100 << "% completed] [Elapsed time: "
                     << (double)elapsed_time/60 << " min] [Remaining time: " 
                     << (double)remaining_time/60 << " min]\r";
         }

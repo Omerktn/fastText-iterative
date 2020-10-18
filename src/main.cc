@@ -137,9 +137,10 @@ void printAnalogiesUsage() {
 }
 
 void printTestAnalogiesUsage() {
-  std::cout << "usage: fasttext test-analogies <model> <folder>\n\n"
+  std::cout << "usage: fasttext test-analogies <model> <folder> <k>\n\n"
             << "  <model>      model filename\n"
             << "  <folder>     directory of analogies text files\n"
+            << "  <k>          (optional; 10 by default) consider score if analogy in top k labels\n"
             << std::endl;
 }
 
@@ -398,12 +399,11 @@ std::mutex model_mutex;
 std::mutex vector_mutex;
 
 static void calculateAnalogyPredictions(FastText *ft, std::string analogy_folder,
-                                        std::string title,
+                                        std::string title, int softness,
                                         std::vector<std::tuple<std::string, unsigned int, unsigned int>> *stats) {
   std::ifstream file(analogy_folder + "/" + title);
   std::string line, wordA, wordB, wordC, wordD;
   unsigned int totalCount = 0, totalCorrect = 0;
-  unsigned int softness = 10;
 
   while (std::getline(file, line, ' ')) {
     wordA = line;
@@ -457,7 +457,7 @@ void computeAndSaveNN(const std::vector<std::string> args) {
 
 void testAnalogies(const std::vector<std::string> args) {
   std::string analogy_folder;
-  if (args.size() == 4) {
+  if (args.size() >= 4) {
     analogy_folder = args[3];
   }
   else {
@@ -465,6 +465,8 @@ void testAnalogies(const std::vector<std::string> args) {
     throw std::invalid_argument("Add analogy folder location!");
     exit(EXIT_FAILURE);
   }
+
+  int softness = (args.size() == 5) ? std::stoi(args[4]) : 10;
 
   FastText fasttext;
   std::string model(args[2]);
@@ -501,7 +503,7 @@ void testAnalogies(const std::vector<std::string> args) {
   for (auto filename : file_list)
     {
       m_future.push_back(std::async(std::launch::async, calculateAnalogyPredictions, &fasttext,
-                                    analogy_folder, filename, &stats));
+                                    analogy_folder, filename, softness, &stats));
       std::cout << "[ " << std::setw(31) << filename << " ] has started." << std::endl;
     }
 
