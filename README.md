@@ -1,32 +1,36 @@
-# fastText
-[fastText](https://fasttext.cc/) is a library for efficient learning of word representations and sentence classification.
-
-[![CircleCI](https://circleci.com/gh/facebookresearch/fastText/tree/master.svg?style=svg)](https://circleci.com/gh/facebookresearch/fastText/tree/master)
+# fastText-iterative
+fastText-iterative is a library for creating smaller (but efficient) fastText models. Forked from original [fastText](https://fasttext.cc/).
 
 ## Table of contents
 
-* [Resources](#resources)
-   * [Models](#models)
-   * [Supplementary data](#supplementary-data)
-   * [FAQ](#faq)
-   * [Cheatsheet](#cheatsheet)
-* [Requirements](#requirements)
-* [Building fastText](#building-fasttext)
-   * [Getting the source code](#getting-the-source-code)
-   * [Building fastText using make (preferred)](#building-fasttext-using-make-preferred)
-   * [Building fastText using cmake](#building-fasttext-using-cmake)
-   * [Building fastText for Python](#building-fasttext-for-python)
-* [Example use cases](#example-use-cases)
-   * [Word representation learning](#word-representation-learning)
-   * [Obtaining word vectors for out-of-vocabulary words](#obtaining-word-vectors-for-out-of-vocabulary-words)
-   * [Text classification](#text-classification)
-* [Full documentation](#full-documentation)
-* [References](#references)
-   * [Enriching Word Vectors with Subword Information](#enriching-word-vectors-with-subword-information)
-   * [Bag of Tricks for Efficient Text Classification](#bag-of-tricks-for-efficient-text-classification)
-   * [FastText.zip: Compressing text classification models](#fasttextzip-compressing-text-classification-models)
-* [Join the fastText community](#join-the-fasttext-community)
-* [License](#license)
+#TODO
+
+## What is new?
+
+### Analogy Tests
+
+You can start a multithreaded analogy test by running:
+
+```
+$ ./fasttext test-analogies <model> <folder>
+```
+
+It will start a thread for each text file in the directory. 
+```
+$ ./fasttext test-analogies ./models/enwik_e15_d200.bin ../analogy_test
+Loading model ./models/enwik_e15_d200.bin
+[              gram2-opposite.txt ] has started.
+[           gram3-comparative.txt ] has started.
+[    gram1-adjective-to-averb.txt ] has started.
+~
+./models/enwik_e15_d200.bin
+[              gram2-opposite.txt ] Correct: 567	 Total: 812 	 Soft10 Acc: 0.6983
+[           gram3-comparative.txt ] Correct: 308	 Total: 1332 	 Soft10 Acc: 0.2312
+[    gram1-adjective-to-averb.txt ] Correct: 461	 Total: 992 	 Soft10 Acc: 0.4647
+Elapsed Time: 75.1 second.
+Mean accuracy: 0.4647% 
+```
+Recommended analogy set: [Google analogy test set](https://aclweb.org/aclwiki/Google_analogy_test_set_(State_of_the_art))
 
 ## Resources
 
