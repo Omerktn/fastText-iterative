@@ -540,7 +540,7 @@ namespace fasttext
 
         if (i % 100 == 1) {
           int64_t elapsed_time = duration_cast<seconds>(steady_clock::now() - begin).count();
-          int64_t remaining_time = (int64_t) (dict_->nwords() - i) * (elapsed_time / i);
+          int64_t remaining_time = (int64_t) (((double)(dict_->nwords() - i) / i) * (elapsed_time));
 
           std::cout << "(#) " << i << " / " << dict_->nwords() 
                     << " [" << (double)(i/dict_->nwords())*100 << "% completed] [Elapsed time: "

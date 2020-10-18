@@ -24,3 +24,22 @@ Mean accuracy: 0.165%
 ./models/distill_e15_d100t60.bin
 Elapsed Time: 217.8 second.
 Mean accuracy: 0.1411% 
+
+./models/distill_e15_d100t50.bin
+Elapsed Time: 186.7 second.
+Mean accuracy: 0.1355% 
+
+
+follower models:
+
+./models/distill_fllw_e15_d100t70.bin
+Elapsed Time: 261.1 second.
+Mean accuracy: 0.175%   
+
+./models/distill_fllw_e15_d100t60.bin
+Elapsed Time: 195 second.
+Mean accuracy: 0.1547% 
+
+./models/distill_fllw_e15_d100t50.bin
+Elapsed Time: 168.2 second.
+Mean accuracy: 0.1369% 
