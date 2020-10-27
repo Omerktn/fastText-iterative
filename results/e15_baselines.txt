@@ -1,0 +1,19 @@
+./models/enwik_e15_d180.bin
+Elapsed Time: 538.2 second.
+Mean accuracy: 0.2342%  
+
+./models/enwik_e15_d170.bin
+Elapsed Time: 446.3 second.
+Mean accuracy: 0.2241% 
+
+./models/enwik_e15_d160.bin
+Elapsed Time: 476.2 second.
+Mean accuracy: 0.2287% 
+
+./models/enwik_e15_d140.bin
+Elapsed Time: 389.3 second.
+Mean accuracy: 0.2058%  
+
+./models/enwik_e15_d75.bin
+Elapsed Time: 252.6 second.
+Mean accuracy: 0.1525%      

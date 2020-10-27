@@ -508,7 +508,11 @@ namespace fasttext
               more_target[i] = neighbor_id;
             }
             
-            model_->updateWithMoreTarget(ngrams, line, w + c, more_target, lr, state);
+            if (args_->outputSmoothing) {
+              model_->updateWithMoreTarget(ngrams, line, w + c, more_target, lr, state);
+            } else if (args_->inputSmoothing) {
+              //TODO
+            }
         }
       }
     }
@@ -838,7 +842,6 @@ namespace fasttext
     utils::seek(ifs, threadId * utils::size(ifs) / args_->thread);
 
     Model::State state(args_->dim, output_->size(0), threadId + args_->seed);
-    //Model::State big_state(big_fasttext->args_->dim, big_fasttext->output_->size(0), threadId + args_->seed);
 
     // Create temp vectors for nn vecs
     std::vector<int32_t> temp_nn_vector;

@@ -81,6 +81,8 @@ namespace fasttext
     int expandMethod;
     std::string distillFrom;
     std::string precomputedNN;
+    bool inputSmoothing;
+    bool outputSmoothing;
 
     std::string autotuneValidationFile;
     std::string autotuneMetric;

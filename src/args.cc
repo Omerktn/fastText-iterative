@@ -52,6 +52,8 @@ namespace fasttext
     expandMethod = 0;
     distillFrom = "";
     precomputedNN = "";
+    inputSmoothing = false;
+    outputSmoothing = false;
 
     autotuneValidationFile = "";
     autotuneMetric = "f1";
@@ -323,6 +325,16 @@ namespace fasttext
         else if (args[ai] == "-expandMethod")
         {
           expandMethod = std::stoi(args.at(ai + 1));
+        }
+        else if (args[ai] == "-inputSmoothing")
+        {
+          inputSmoothing = true;
+          ai--;
+        }
+        else if (args[ai] == "-outputSmoothing")
+        {
+          outputSmoothing = true;
+          ai--;
         } else {
           std::cerr << "Unknown argument: " << args[ai] << std::endl;
           printHelp();

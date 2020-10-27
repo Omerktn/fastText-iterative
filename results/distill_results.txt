@@ -3,7 +3,7 @@ dim 50 baseline:
 Elapsed Time: 204.7 second.
 Mean accuracy: 0.1263% 
 
-/models/distill_e15_d50.bin (hatalı isim d=30)
+/models/distill_e15_d30.bin
 Elapsed Time: 123.9 second.
 Mean accuracy: 0.08489%  
 
@@ -54,3 +54,19 @@ Mean accuracy: 0.2377%
 ./models/distill_e15_d200t180.bin
 Elapsed Time: 537.9 second.
 Mean accuracy: 0.2323%  
+
+./models/distill_fllw_e15_d200t160.bin
+Elapsed Time: 431.5 second.
+Mean accuracy: 0.2345%  
+
+./models/distill_fllw_e15_d200t140.bin
+Elapsed Time: 397.3 second.
+Mean accuracy: 0.2288% 
+
+./models/distill_fllw_e15_d200t120.bin
+Elapsed Time: 353.6 second.
+Mean accuracy: 0.212%    
+
+./models/distill_fllw_e15_d200t100.bin
+Elapsed Time: 315 second.
+Mean accuracy: 0.2178%      

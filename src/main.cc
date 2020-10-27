@@ -557,6 +557,16 @@ void train(const std::vector<std::string> args) {
         fasttext->big_fasttext->getNNFromFile(a.precomputedNN);
         std::cout << "(#) NNs got from file.\n";
       }  
+
+      if (a.inputSmoothing) {
+        std::cout << "(#) inputSmoothing active.\n";
+      }
+      if (a.outputSmoothing) {
+        std::cout << "(#) outputSmoothing active.\n";
+      }
+      if (!a.inputSmoothing && !a.outputSmoothing) {
+        throw std::invalid_argument("You have to specify either -inputSmoothing or -outputSmoothing to perform distillation.\n");
+      }
     }
 
   if (a.hasAutotune()) {
