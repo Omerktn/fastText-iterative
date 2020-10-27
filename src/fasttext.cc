@@ -490,7 +490,7 @@ namespace fasttext
                                  Model::State &state,
                                  real lr,
                                  const std::vector<int32_t> &line,
-                                 std::vector<int32_t> &more_target)
+                                 std::vector<int32_t> &more_io)
   {
     std::uniform_int_distribution<> uniform(1, args_->ws);
     for (int32_t w = 0; w < line.size(); w++)
@@ -505,13 +505,20 @@ namespace fasttext
 
             for(int i=0; i < NN_SIZE; i++) {
               int32_t neighbor_id = (*(big_fasttext->computed_nn))[word_id][i];
-              more_target[i] = neighbor_id;
+              more_io[i] = neighbor_id;
             }
             
-            if (args_->outputSmoothing) {
-              model_->updateWithMoreTarget(ngrams, line, w + c, more_target, lr, state);
-            } else if (args_->inputSmoothing) {
-              //TODO
+            if (args_->outputSmoothing)
+            {
+              model_->updateWithMoreTarget(ngrams, line, w + c, more_io, lr, state);
+            }
+            else if (args_->inputSmoothing)
+            {
+              model_->update(ngrams, line, w + c, lr, state);
+              for(int i=0; i < NN_SIZE; i++)
+              {
+                model_->update(more_io, line, w + c, lr, state);
+              }  
             }
         }
       }

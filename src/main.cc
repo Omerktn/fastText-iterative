@@ -545,6 +545,16 @@ void train(const std::vector<std::string> args) {
   // Load big distillation model
   if(!a.distillFrom.empty())
     {
+      if (a.inputSmoothing) {
+        std::cout << "(#) inputSmoothing active.\n";
+      }
+      if (a.outputSmoothing) {
+        std::cout << "(#) outputSmoothing active.\n";
+      }
+      if (!a.inputSmoothing && !a.outputSmoothing) {
+        throw std::invalid_argument("You have to specify either -inputSmoothing or -outputSmoothing to perform distillation.\n");
+      }
+
       fasttext->big_fasttext = std::make_shared<FastText>();
       fasttext->big_fasttext->loadModel(a.distillFrom);
       std::cout << "(#) Distillation model has loaded.\n";
@@ -557,16 +567,6 @@ void train(const std::vector<std::string> args) {
         fasttext->big_fasttext->getNNFromFile(a.precomputedNN);
         std::cout << "(#) NNs got from file.\n";
       }  
-
-      if (a.inputSmoothing) {
-        std::cout << "(#) inputSmoothing active.\n";
-      }
-      if (a.outputSmoothing) {
-        std::cout << "(#) outputSmoothing active.\n";
-      }
-      if (!a.inputSmoothing && !a.outputSmoothing) {
-        throw std::invalid_argument("You have to specify either -inputSmoothing or -outputSmoothing to perform distillation.\n");
-      }
     }
 
   if (a.hasAutotune()) {
