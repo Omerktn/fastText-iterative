@@ -47,6 +47,12 @@ $ fasttext save-nn <model> <outpath>
   <outpath>    where NN file will save
 ```
 
+### Distillation
+
+![Distillation accuracy graph.](graphs/distillation_october_31.png)
+
+Note that this chart will be updated periodically. Last update is October 31 2020.
+
 ### Distillation method 1: Output Smoothing
 
 Our Output Smoothing method performs as follows.
