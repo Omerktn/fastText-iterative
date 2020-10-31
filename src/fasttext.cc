@@ -512,12 +512,13 @@ namespace fasttext
             {
               model_->updateWithMoreTarget(ngrams, line, w + c, more_io, lr, state);
             }
-            else if (args_->inputSmoothing)
+            if (args_->inputSmoothing)
             {
               model_->update(ngrams, line, w + c, lr, state);
               for(int i=0; i < NN_SIZE; i++)
               {
-                model_->update(more_io, line, w + c, lr, state);
+                const std::vector<int32_t> &more_ngrams = dict_->getSubwords(more_io[i]);
+                model_->update(more_ngrams, line, w + c, lr, state);
               }  
             }
         }

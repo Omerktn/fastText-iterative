@@ -1,0 +1,34 @@
+./models/inpsmt_e10_d100t100.bin
+Elapsed Time: 279.2 second.
+Mean accuracy: 0.2973% 
+
+./models/inpsmt_e15_d100t80.bin
+Elapsed Time: 256.8 second.
+Mean accuracy: 0.3056%                                                                                                                                               
+
+./models/inpsmt_e15_d100t60.bin
+Elapsed Time: 211 second.
+Mean accuracy: 0.2891% 
+
+./models/inpsmt_e15_d100t40.bin
+Elapsed Time: 152.6 second.
+Mean accuracy: 0.2618% 
+
+
+# From 200
+
+./models/inpsmt_e15_d200t200.bin
+Elapsed Time: 513.6 second.
+Mean accuracy: 0.325%      
+
+
+# 45 epoch for comparision
+
+./models/enwik_e45_d100.bin
+Elapsed Time: 329.5 second.
+Mean accuracy: 0.1439%  
+
+./models/enwik_e30_d100.bin
+Elapsed Time: 368.2 second.
+Mean accuracy: 0.162%   
+
