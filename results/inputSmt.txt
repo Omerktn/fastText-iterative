@@ -21,6 +21,9 @@ Mean accuracy: 0.2618%
 Elapsed Time: 513.6 second.
 Mean accuracy: 0.325%      
 
+./models/inpsmt_e15_d200t180.bin
+Elapsed Time: 470.3 second.
+Mean accuracy: 0.3325%
 
 # 45 epoch for comparision
 

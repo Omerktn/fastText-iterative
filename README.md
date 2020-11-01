@@ -49,7 +49,7 @@ $ fasttext save-nn <model> <outpath>
 
 ### Distillation
 
-![Distillation accuracy graph.](graphs/distillation_october_31.png)
+![Distillation accuracy graph.](graphs/distillation_november_1.png)
 
 Note that this chart will be updated periodically. Last update is October 31 2020.
 
