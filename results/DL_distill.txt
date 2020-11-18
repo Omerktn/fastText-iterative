@@ -1,0 +1,18 @@
+ResNet:
+
+inpsmt_e15_d100t60
+Acc: 0.6004999876022339 (train acc:0.736)
+train:30k test:10k
+
+enwik_e15_d100:
+Acc: 0.5806000232696533
+train:30k test:10k
+
+
+enwik_e15_d200:
+Acc: 0.5756999850273132 (train acc:0.77)
+train:30k test:10k
+
+inpsmt_e15_d200t200
+Acc: 0.6014000177383423 (train acc:0.7761)
+train:30k test:10k

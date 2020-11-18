@@ -119,3 +119,58 @@ Mean accuracy: 0.1439%
 Elapsed Time: 368.2 second.
 Mean accuracy: 0.162%   
 
+
+
+
+
+
+## CNN Keras Results
+
+inpsmt_e15_d100t40:
+test loss, test acc: [0.6183213591575623, 0.650600016117096]
+train : 30k test : 10k
+
+inpsmt_e15_d100t60:
+test loss, test acc: [0.6042382121086121, 0.6646999716758728]
+train : 30k test : 10k
+
+
+inpsmt_e15_d200t40:
+test loss, test acc: [0.635763943195343, 0.6377999782562256]
+train : 30k test : 10k
+
+inpsmt_e15_d200t100:
+test loss, test acc: [0.6004053354263306, 0.6783000230789185]
+train : 30k test : 10k
+
+inpsmt_e15_d200t120:
+test loss, test acc: [0.5999810099601746, 0.6725999712944031]
+train : 30k test : 10k
+
+inpsmt_e15_d200t160:
+test loss, test acc: [0.606088399887085, 0.6791999936103821]
+train : 30k test : 10k
+
+inpsmt_e15_d200t180
+test loss, test acc: [0.5920155048370361, 0.6841999888420105]
+train : 30k test : 10k
+
+inpsmt_e15_d200t200:
+test loss, test acc: [0.6206783652305603, 0.6818000078201294]
+train : 30k test : 10k
+
+
+enwik_e15_d50:
+test loss, test acc: [0.6158456802368164, 0.6470000147819519]
+train : 30k test : 10k
+
+enwik_e15_d100:
+test loss, test acc: [0.5909067988395691, 0.6808000206947327]
+train : 30k test : 10k
+
+enwik_e15_d200:
+test loss, test acc: [0.6087753176689148, 0.6812000274658203]
+train : 30k test : 10k
+
+
+
