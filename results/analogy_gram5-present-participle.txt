@@ -1,0 +1,21 @@
+--------------------- gram5-present-participle.txt---------------------
+debug debugging (scream)? : screaming
+fly flying (scream)? : screaming
+generate generating (scream)? : screaming
+implement implementing (scream)? : screaming
+invent inventing (scream)? : screaming
+listen listening (scream)? : screaming
+look looking (scream)? : screaming
+read reading (scream)? : screaming
+scream screaming (sing)? : singing
+shuffle shuffling (sing)? : singing
+sing singing (run)? : running
+sing singing (scream)? : screaming
+slow slowing (run)? : running
+swim swimming (run)? : running
+swim swimming (scream)? : screaming
+swim swimming (sing)? : singing
+think thinking (run)? : running
+walk walking (scream)? : screaming
+write writing (scream)? : screaming
+

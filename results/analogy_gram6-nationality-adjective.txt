@@ -1,0 +1,10 @@
+--------------------- gram6-nationality-adjective.txt---------------------
+Belarus Belorussian (Moldova)? : Moldovan
+Chile Chilean (Moldova)? : Moldovan
+Colombia Colombian (Moldova)? : Moldovan
+India Indian (Moldova)? : Moldovan
+Israel Israeli (Moldova)? : Moldovan
+Malta Maltese (Moldova)? : Moldovan
+Mexico Mexican (Moldova)? : Moldovan
+Peru Peruvian (Moldova)? : Moldovan
+

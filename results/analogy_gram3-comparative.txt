@@ -1,0 +1,17 @@
+--------------------- gram3-comparative.txt---------------------
+bright brighter (smart)? : smarter
+cheap cheaper (smart)? : smarter
+cold colder (smart)? : smarter
+cool cooler (smart)? : smarter
+easy easier (smart)? : smarter
+loud louder (smart)? : smarter
+new newer (smart)? : smarter
+quick quicker (smart)? : smarter
+small smaller (smart)? : smarter
+strong stronger (smart)? : smarter
+tall taller (smart)? : smarter
+tight tighter (smart)? : smarter
+tough tougher (smart)? : smarter
+wide wider (smart)? : smarter
+young younger (smart)? : smarter
+

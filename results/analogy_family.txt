@@ -1,0 +1,9 @@
+--------------------- family.txt---------------------
+brothers sisters (boy)? : girl
+husband wife (stepfather)? : stepmother
+husband wife (father)? : mother
+husband wife (he)? : she
+husband wife (his)? : her
+policeman policewoman (boy)? : girl
+stepfather stepmother (boy)? : girl
+

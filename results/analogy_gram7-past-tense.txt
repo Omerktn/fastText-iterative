@@ -1,0 +1,7 @@
+--------------------- gram7-past-tense.txt---------------------
+hiding hid (playing)? : played
+shrinking shrank (enhancing)? : enhanced
+shrinking shrank (increasing)? : increased
+sitting sat (slowing)? : slowed
+spending spent (increasing)? : increased
+

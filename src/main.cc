@@ -23,6 +23,8 @@
 #include "dictionary.h"
 #include "fasttext.h"
 
+#include <fstream>
+
 using namespace fasttext;
 
 void printUsage() {
@@ -405,6 +407,9 @@ static void calculateAnalogyPredictions(FastText *ft, std::string analogy_folder
   std::string line, wordA, wordB, wordC, wordD;
   unsigned int totalCount = 0, totalCorrect = 0;
 
+  std::ofstream analogyFile("./results/analogy_" + title);
+  analogyFile << "--------------------- " << title << "---------------------\n";
+
   while (std::getline(file, line, ' ')) {
     wordA = line;
     std::getline(file, line, ' ');
@@ -420,6 +425,7 @@ static void calculateAnalogyPredictions(FastText *ft, std::string analogy_folder
 
     for (auto predict : predicts) {
       if (predict.second == wordD) {
+        analogyFile << wordA << " " << wordB << " (" << wordC << ")? : " << predict.second << "\n";
         totalCorrect++;
         break;
       }
@@ -427,6 +433,8 @@ static void calculateAnalogyPredictions(FastText *ft, std::string analogy_folder
     totalCount++;
   }
 
+  analogyFile << '\n';
+  analogyFile.close();
   std::lock_guard<std::mutex> lock(vector_mutex);
   stats->push_back(std::make_tuple(title, totalCount, totalCorrect));
   std::cout << "[ " << std::setw(31) << title << " ] Correct: " << totalCorrect

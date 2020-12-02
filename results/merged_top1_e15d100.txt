@@ -1,0 +1,447 @@
+--------------------- capital-common-countries.txt---------------------
+
+--------------------- capital-world.txt---------------------
+
+--------------------- city-in-state.txt---------------------
+
+--------------------- currency.txt---------------------
+
+--------------------- family.txt---------------------
+brothers sisters (boy)? : girl
+husband wife (stepfather)? : stepmother
+husband wife (father)? : mother
+husband wife (he)? : she
+husband wife (his)? : her
+policeman policewoman (boy)? : girl
+stepfather stepmother (boy)? : girl
+
+--------------------- gram1-adjective-to-averb.txt---------------------
+amazing amazingly (cheerful)? : cheerfully
+amazing amazingly (infrequent)? : infrequently
+amazing amazingly (typical)? : typically
+amazing amazingly (unfortunate)? : unfortunately
+calm calmly (cheerful)? : cheerfully
+calm calmly (amazing)? : amazingly
+cheerful cheerfully (reluctant)? : reluctantly
+cheerful cheerfully (unfortunate)? : unfortunately
+cheerful cheerfully (amazing)? : amazingly
+efficient efficiently (reluctant)? : reluctantly
+efficient efficiently (unfortunate)? : unfortunately
+efficient efficiently (amazing)? : amazingly
+efficient efficiently (cheerful)? : cheerfully
+fortunate fortunately (unfortunate)? : unfortunately
+fortunate fortunately (amazing)? : amazingly
+fortunate fortunately (cheerful)? : cheerfully
+free freely (unfortunate)? : unfortunately
+free freely (amazing)? : amazingly
+free freely (cheerful)? : cheerfully
+furious furiously (rapid)? : rapidly
+furious furiously (reluctant)? : reluctantly
+furious furiously (unfortunate)? : unfortunately
+furious furiously (amazing)? : amazingly
+furious furiously (cheerful)? : cheerfully
+happy happily (unfortunate)? : unfortunately
+immediate immediately (amazing)? : amazingly
+immediate immediately (cheerful)? : cheerfully
+infrequent infrequently (unfortunate)? : unfortunately
+infrequent infrequently (amazing)? : amazingly
+infrequent infrequently (cheerful)? : cheerfully
+lucky luckily (reluctant)? : reluctantly
+lucky luckily (unfortunate)? : unfortunately
+lucky luckily (amazing)? : amazingly
+most mostly (rapid)? : rapidly
+most mostly (reluctant)? : reluctantly
+most mostly (amazing)? : amazingly
+most mostly (cheerful)? : cheerfully
+obvious obviously (unfortunate)? : unfortunately
+obvious obviously (amazing)? : amazingly
+obvious obviously (cheerful)? : cheerfully
+occasional occasionally (amazing)? : amazingly
+occasional occasionally (cheerful)? : cheerfully
+possible possibly (cheerful)? : cheerfully
+possible possibly (infrequent)? : infrequently
+precise precisely (amazing)? : amazingly
+precise precisely (cheerful)? : cheerfully
+professional professionally (reluctant)? : reluctantly
+professional professionally (amazing)? : amazingly
+professional professionally (cheerful)? : cheerfully
+quick quickly (amazing)? : amazingly
+quick quickly (cheerful)? : cheerfully
+quiet quietly (amazing)? : amazingly
+quiet quietly (cheerful)? : cheerfully
+rapid rapidly (unfortunate)? : unfortunately
+rapid rapidly (amazing)? : amazingly
+rapid rapidly (cheerful)? : cheerfully
+rare rarely (amazing)? : amazingly
+rare rarely (cheerful)? : cheerfully
+reluctant reluctantly (unfortunate)? : unfortunately
+reluctant reluctantly (amazing)? : amazingly
+reluctant reluctantly (cheerful)? : cheerfully
+reluctant reluctantly (infrequent)? : infrequently
+safe safely (amazing)? : amazingly
+safe safely (cheerful)? : cheerfully
+serious seriously (amazing)? : amazingly
+serious seriously (cheerful)? : cheerfully
+slow slowly (unfortunate)? : unfortunately
+slow slowly (amazing)? : amazingly
+slow slowly (cheerful)? : cheerfully
+slow slowly (reluctant)? : reluctantly
+sudden suddenly (unfortunate)? : unfortunately
+sudden suddenly (amazing)? : amazingly
+sudden suddenly (cheerful)? : cheerfully
+swift swiftly (amazing)? : amazingly
+swift swiftly (cheerful)? : cheerfully
+typical typically (unfortunate)? : unfortunately
+typical typically (amazing)? : amazingly
+typical typically (cheerful)? : cheerfully
+typical typically (reluctant)? : reluctantly
+unfortunate unfortunately (amazing)? : amazingly
+unfortunate unfortunately (cheerful)? : cheerfully
+unfortunate unfortunately (reluctant)? : reluctantly
+usual usually (amazing)? : amazingly
+usual usually (cheerful)? : cheerfully
+usual usually (reluctant)? : reluctantly
+usual usually (unfortunate)? : unfortunately
+
+--------------------- gram2-opposite.txt---------------------
+acceptable unacceptable (likely)? : unlikely
+acceptable unacceptable (tasteful)? : distasteful
+aware unaware (rational)? : irrational
+aware unaware (reasonable)? : unreasonable
+aware unaware (tasteful)? : distasteful
+clear unclear (possible)? : impossible
+clear unclear (possibly)? : impossibly
+clear unclear (tasteful)? : distasteful
+comfortable uncomfortable (informed)? : uninformed
+comfortable uncomfortable (likely)? : unlikely
+comfortable uncomfortable (tasteful)? : distasteful
+competitive uncompetitive (likely)? : unlikely
+competitive uncompetitive (tasteful)? : distasteful
+consistent inconsistent (likely)? : unlikely
+consistent inconsistent (tasteful)? : distasteful
+convincing unconvincing (likely)? : unlikely
+convincing unconvincing (tasteful)? : distasteful
+convenient inconvenient (tasteful)? : distasteful
+decided undecided (tasteful)? : distasteful
+efficient inefficient (likely)? : unlikely
+efficient inefficient (tasteful)? : distasteful
+ethical unethical (responsible)? : irresponsible
+ethical unethical (tasteful)? : distasteful
+fortunate unfortunate (tasteful)? : distasteful
+honest dishonest (likely)? : unlikely
+honest dishonest (possible)? : impossible
+honest dishonest (possibly)? : impossibly
+honest dishonest (reasonable)? : unreasonable
+honest dishonest (tasteful)? : distasteful
+impressive unimpressive (likely)? : unlikely
+impressive unimpressive (tasteful)? : distasteful
+informative uninformative (reasonable)? : unreasonable
+informative uninformative (tasteful)? : distasteful
+informative uninformative (competitive)? : uncompetitive
+informed uninformed (logical)? : illogical
+informed uninformed (reasonable)? : unreasonable
+informed uninformed (tasteful)? : distasteful
+informed uninformed (competitive)? : uncompetitive
+informed uninformed (convenient)? : inconvenient
+known unknown (honest)? : dishonest
+likely unlikely (tasteful)? : distasteful
+logical illogical (tasteful)? : distasteful
+logical illogical (informed)? : uninformed
+logical illogical (likely)? : unlikely
+pleasant unpleasant (possible)? : impossible
+pleasant unpleasant (tasteful)? : distasteful
+possibly impossibly (tasteful)? : distasteful
+productive unproductive (tasteful)? : distasteful
+productive unproductive (possible)? : impossible
+rational irrational (tasteful)? : distasteful
+rational irrational (aware)? : unaware
+rational irrational (likely)? : unlikely
+rational irrational (possibly)? : impossibly
+reasonable unreasonable (tasteful)? : distasteful
+reasonable unreasonable (likely)? : unlikely
+responsible irresponsible (ethical)? : unethical
+tasteful distasteful (likely)? : unlikely
+tasteful distasteful (possible)? : impossible
+tasteful distasteful (possibly)? : impossibly
+
+--------------------- gram3-comparative.txt---------------------
+bright brighter (smart)? : smarter
+cheap cheaper (smart)? : smarter
+cold colder (smart)? : smarter
+cool cooler (smart)? : smarter
+easy easier (smart)? : smarter
+loud louder (smart)? : smarter
+new newer (smart)? : smarter
+quick quicker (smart)? : smarter
+small smaller (smart)? : smarter
+strong stronger (smart)? : smarter
+tall taller (smart)? : smarter
+tight tighter (smart)? : smarter
+tough tougher (smart)? : smarter
+wide wider (smart)? : smarter
+young younger (smart)? : smarter
+
+--------------------- gram4-superlative.txt---------------------
+
+--------------------- gram5-present-participle.txt---------------------
+debug debugging (scream)? : screaming
+fly flying (scream)? : screaming
+generate generating (scream)? : screaming
+implement implementing (scream)? : screaming
+invent inventing (scream)? : screaming
+listen listening (scream)? : screaming
+look looking (scream)? : screaming
+read reading (scream)? : screaming
+scream screaming (sing)? : singing
+shuffle shuffling (sing)? : singing
+sing singing (run)? : running
+sing singing (scream)? : screaming
+slow slowing (run)? : running
+swim swimming (run)? : running
+swim swimming (scream)? : screaming
+swim swimming (sing)? : singing
+think thinking (run)? : running
+walk walking (scream)? : screaming
+write writing (scream)? : screaming
+
+--------------------- gram6-nationality-adjective.txt---------------------
+Belarus Belorussian (Moldova)? : Moldovan
+Chile Chilean (Moldova)? : Moldovan
+Colombia Colombian (Moldova)? : Moldovan
+India Indian (Moldova)? : Moldovan
+Israel Israeli (Moldova)? : Moldovan
+Malta Maltese (Moldova)? : Moldovan
+Mexico Mexican (Moldova)? : Moldovan
+Peru Peruvian (Moldova)? : Moldovan
+
+--------------------- gram7-past-tense.txt---------------------
+hiding hid (playing)? : played
+shrinking shrank (enhancing)? : enhanced
+shrinking shrank (increasing)? : increased
+sitting sat (slowing)? : slowed
+spending spent (increasing)? : increased
+
+--------------------- gram8-plural.txt---------------------
+banana bananas (car)? : cars
+banana bananas (color)? : colors
+banana bananas (lion)? : lions
+banana bananas (onion)? : onions
+banana bananas (pear)? : pears
+bird birds (onion)? : onions
+bird birds (banana)? : bananas
+bottle bottles (onion)? : onions
+bottle bottles (banana)? : bananas
+building buildings (onion)? : onions
+building buildings (banana)? : bananas
+car cars (onion)? : onions
+car cars (banana)? : bananas
+cat cats (onion)? : onions
+child children (onion)? : onions
+child children (banana)? : bananas
+cloud clouds (color)? : colors
+cloud clouds (finger)? : fingers
+cloud clouds (onion)? : onions
+cloud clouds (pear)? : pears
+cloud clouds (banana)? : bananas
+color colors (cow)? : cows
+color colors (monkey)? : monkeys
+color colors (onion)? : onions
+color colors (banana)? : bananas
+color colors (cloud)? : clouds
+computer computers (onion)? : onions
+cow cows (finger)? : fingers
+cow cows (onion)? : onions
+cow cows (color)? : colors
+dog dogs (onion)? : onions
+dog dogs (pear)? : pears
+dog dogs (banana)? : bananas
+dog dogs (color)? : colors
+dollar dollars (onion)? : onions
+dollar dollars (banana)? : bananas
+donkey donkeys (finger)? : fingers
+donkey donkeys (onion)? : onions
+donkey donkeys (pear)? : pears
+donkey donkeys (banana)? : bananas
+dream dreams (finger)? : fingers
+dream dreams (onion)? : onions
+dream dreams (pig)? : pigs
+dream dreams (banana)? : bananas
+dream dreams (color)? : colors
+eagle eagles (onion)? : onions
+eagle eagles (snake)? : snakes
+elephant elephants (onion)? : onions
+eye eyes (goat)? : goats
+eye eyes (monkey)? : monkeys
+eye eyes (onion)? : onions
+eye eyes (banana)? : bananas
+eye eyes (color)? : colors
+eye eyes (dollar)? : dollars
+finger fingers (monkey)? : monkeys
+finger fingers (onion)? : onions
+finger fingers (banana)? : bananas
+finger fingers (cloud)? : clouds
+finger fingers (cow)? : cows
+goat goats (hand)? : hands
+goat goats (banana)? : bananas
+goat goats (finger)? : fingers
+hand hands (horse)? : horses
+hand hands (monkey)? : monkeys
+hand hands (onion)? : onions
+hand hands (banana)? : bananas
+horse horses (onion)? : onions
+lion lions (onion)? : onions
+lion lions (pear)? : pears
+lion lions (snake)? : snakes
+lion lions (banana)? : bananas
+machine machines (onion)? : onions
+machine machines (pear)? : pears
+machine machines (banana)? : bananas
+mango mangoes (monkey)? : monkeys
+mango mangoes (onion)? : onions
+mango mangoes (pig)? : pigs
+mango mangoes (snake)? : snakes
+mango mangoes (banana)? : bananas
+mango mangoes (bottle)? : bottles
+mango mangoes (color)? : colors
+mango mangoes (dream)? : dreams
+mango mangoes (finger)? : fingers
+mango mangoes (lion)? : lions
+man men (pear)? : pears
+melon melons (monkey)? : monkeys
+melon melons (onion)? : onions
+monkey monkeys (onion)? : onions
+monkey monkeys (pear)? : pears
+monkey monkeys (banana)? : bananas
+monkey monkeys (finger)? : fingers
+mouse mice (onion)? : onions
+mouse mice (pear)? : pears
+mouse mice (banana)? : bananas
+mouse mice (finger)? : fingers
+onion onions (rat)? : rats
+onion onions (banana)? : bananas
+pear pears (rat)? : rats
+pear pears (road)? : roads
+pear pears (banana)? : bananas
+pear pears (cat)? : cats
+pear pears (dream)? : dreams
+pear pears (finger)? : fingers
+pear pears (goat)? : goats
+pear pears (horse)? : horses
+pear pears (lion)? : lions
+pear pears (monkey)? : monkeys
+pear pears (onion)? : onions
+pig pigs (banana)? : bananas
+pineapple pineapples (rat)? : rats
+pineapple pineapples (banana)? : bananas
+pineapple pineapples (bird)? : birds
+pineapple pineapples (cat)? : cats
+pineapple pineapples (color)? : colors
+pineapple pineapples (lion)? : lions
+pineapple pineapples (monkey)? : monkeys
+pineapple pineapples (onion)? : onions
+road roads (banana)? : bananas
+road roads (finger)? : fingers
+road roads (onion)? : onions
+road roads (pear)? : pears
+snake snakes (banana)? : bananas
+snake snakes (onion)? : onions
+woman women (onion)? : onions
+woman women (pear)? : pears
+
+--------------------- gram9-plural-verbs.txt---------------------
+decrease decreases (enhance)? : enhances
+describe describes (enhance)? : enhances
+describe describes (implement)? : implements
+describe describes (listen)? : listens
+eat eats (enhance)? : enhances
+eat eats (predict)? : predicts
+enhance enhances (listen)? : listens
+enhance enhances (walk)? : walks
+estimate estimates (generate)? : generates
+estimate estimates (vanish)? : vanishes
+estimate estimates (walk)? : walks
+estimate estimates (eat)? : eats
+estimate estimates (enhance)? : enhances
+find finds (enhance)? : enhances
+generate generates (implement)? : implements
+generate generates (enhance)? : enhances
+go goes (implement)? : implements
+go goes (enhance)? : enhances
+implement implements (listen)? : listens
+implement implements (predict)? : predicts
+implement implements (vanish)? : vanishes
+implement implements (enhance)? : enhances
+implement implements (generate)? : generates
+increase increases (listen)? : listens
+increase increases (eat)? : eats
+increase increases (enhance)? : enhances
+listen listens (enhance)? : enhances
+play plays (predict)? : predicts
+play plays (enhance)? : enhances
+play plays (listen)? : listens
+predict predicts (work)? : works
+predict predicts (eat)? : eats
+predict predicts (enhance)? : enhances
+provide provides (enhance)? : enhances
+provide provides (implement)? : implements
+say says (enhance)? : enhances
+say says (predict)? : predicts
+scream screams (vanish)? : vanishes
+scream screams (walk)? : walks
+scream screams (eat)? : eats
+scream screams (enhance)? : enhances
+search searches (walk)? : walks
+search searches (generate)? : generates
+search searches (listen)? : listens
+search searches (play)? : plays
+see sees (enhance)? : enhances
+see sees (implement)? : implements
+shuffle shuffles (vanish)? : vanishes
+shuffle shuffles (walk)? : walks
+shuffle shuffles (enhance)? : enhances
+shuffle shuffles (generate)? : generates
+shuffle shuffles (listen)? : listens
+shuffle shuffles (play)? : plays
+sing sings (enhance)? : enhances
+sing sings (predict)? : predicts
+sit sits (enhance)? : enhances
+slow slows (walk)? : walks
+slow slows (enhance)? : enhances
+speak speaks (enhance)? : enhances
+speak speaks (implement)? : implements
+speak speaks (listen)? : listens
+swim swims (listen)? : listens
+talk talks (eat)? : eats
+talk talks (enhance)? : enhances
+think thinks (enhance)? : enhances
+think thinks (implement)? : implements
+think thinks (listen)? : listens
+think thinks (predict)? : predicts
+vanish vanishes (enhance)? : enhances
+vanish vanishes (implement)? : implements
+vanish vanishes (listen)? : listens
+walk walks (enhance)? : enhances
+work works (listen)? : listens
+work works (predict)? : predicts
+write writes (enhance)? : enhances
+write writes (implement)? : implements
+write writes (listen)? : listens
+
+
+./models/enwik_e15_d100.bin
+[                gram8-plural.txt ] Correct: 125	 Total: 1332 	 Soft1 Acc: 0.09384
+[    capital-common-countries.txt ] Correct: 0	 Total: 506 	 Soft1 Acc: 0
+[                    currency.txt ] Correct: 0	 Total: 866 	 Soft1 Acc: 0
+[              gram2-opposite.txt ] Correct: 59	 Total: 812 	 Soft1 Acc: 0.07266
+[           gram4-superlative.txt ] Correct: 0	 Total: 1122 	 Soft1 Acc: 0
+[           gram3-comparative.txt ] Correct: 15	 Total: 1332 	 Soft1 Acc: 0.01126
+[                      family.txt ] Correct: 7	 Total: 506 	 Soft1 Acc: 0.01383
+[            gram7-past-tense.txt ] Correct: 5	 Total: 1560 	 Soft1 Acc: 0.003205
+[    gram1-adjective-to-averb.txt ] Correct: 86	 Total: 992 	 Soft1 Acc: 0.08669
+[    gram5-present-participle.txt ] Correct: 19	 Total: 1056 	 Soft1 Acc: 0.01799
+[          gram9-plural-verbs.txt ] Correct: 77	 Total: 870 	 Soft1 Acc: 0.08851
+[ gram6-nationality-adjective.txt ] Correct: 8	 Total: 1599 	 Soft1 Acc: 0.005003
+[               city-in-state.txt ] Correct: 0	 Total: 2467 	 Soft1 Acc: 0
+[               capital-world.txt ] Correct: 0	 Total: 4524 	 Soft1 Acc: 0
+Elapsed Time: 280 second.
+Mean accuracy: 0.02807%  
