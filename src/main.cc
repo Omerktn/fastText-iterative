@@ -552,7 +552,8 @@ void train(const std::vector<std::string> args) {
         std::cout << "(#) outputSmoothing active.\n";
       }
       if (!a.inputSmoothing && !a.outputSmoothing) {
-        throw std::invalid_argument("You have to specify either -inputSmoothing or -outputSmoothing to perform distillation.\n");
+        throw std::invalid_argument("You have to specify one of these labels: -inputSmoothing \
+                                                or -outputSmoothing to perform distillation.\n");
       }
 
       fasttext->big_fasttext = std::make_shared<FastText>();

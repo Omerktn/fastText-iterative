@@ -14,3 +14,4 @@ node_modules/
 nnfiles/
 build/
 supervised/
+results/notebooks/
